@@ -1,136 +1,104 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Schmuck-Allee</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schmuck Allee</title>
   <style>
     body {
       margin: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: #fafafa;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background-color: #f9f9f9;
       color: #333;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
     }
+
     header {
       text-align: center;
-      padding: 2rem 1rem 1rem;
-      border-bottom: 1px solid #ddd;
-      background: #fff;
+      padding: 40px 20px 20px;
+      background: white;
     }
+
     header img {
-      max-width: 250px;
-      height: auto;
+      max-width: 180px;
+      margin-bottom: 10px;
     }
-    main {
-      flex: 1;
-      width: 100%;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-    }
-    main h2 {
+
+    header h1 {
+      font-family: "Georgia", serif;
       font-size: 2rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      color: #444;
+      color: #c9a24a;
+      margin: 0;
     }
-    main p {
-      line-height: 1.7;
+
+    .intro {
+      text-align: center;
+      padding: 30px 20px;
+      max-width: 800px;
+      margin: auto;
       font-size: 1.1rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      color: #555;
+      line-height: 1.6;
     }
-    .products {
-      margin-top: 3rem;
-    }
-    .product-grid {
+
+    .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
     }
-    .product {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      overflow: hidden;
-      text-align: center;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    .gallery-left {
+      grid-row: span 2;
     }
-    .product:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-    }
-    .product img {
+
+    .gallery img {
       width: 100%;
-      height: 220px;
+      height: auto;
+      border-radius: 8px;
       object-fit: cover;
-      display: block;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    .product h3 {
-      margin: 1rem 0 0.5rem;
-      font-size: 1.2rem;
-      color: #333;
-    }
-    .product p {
-      font-size: 0.95rem;
-      color: #666;
-      margin: 0 1rem 1.2rem;
-    }
+
     footer {
-      background: #333;
-      color: #eee;
       text-align: center;
-      padding: 1rem;
+      padding: 30px 20px;
+      background: #fff;
       font-size: 0.9rem;
+      color: #555;
+      border-top: 1px solid #eee;
     }
   </style>
 </head>
 <body>
   <header>
-    <!-- Replace with your logo -->
-    <img src="logo.png" alt="Schmuck-Allee Logo">
+    <img src="0d6cde9c-7a30-4dea-abe8-d37fad77d406.png" alt="Schmuck Allee Logo">
+    <h1>Schmuck Allee</h1>
   </header>
 
-  <main>
-    <h2>Willkommen bei Schmuck-Allee</h2>
+  <section class="intro">
     <p>
-      Schmuck-Allee steht für zeitlose Eleganz, höchste Qualität und meisterhafte Handwerkskunst.
-      Unsere Kollektion vereint klassische Schönheit mit modernem Design – Schmuckstücke, die 
-      nicht nur glänzen, sondern Erinnerungen schaffen.
+      At <strong>Schmuck Allee</strong>, we design elegant, timeless containers 
+      made to protect and present your most valuable jewellery.  
+      Our flagship piece is crafted with precision, balancing beauty 
+      and functionality — the perfect place to keep what matters most.
     </p>
-    <p>
-      Lassen Sie sich von unserer Auswahl inspirieren und finden Sie Ihr perfektes Stück für 
-      besondere Momente oder den Alltag mit Stil.
-    </p>
+  </section>
 
-    <section class="products">
-      <h2>Unsere Kollektion</h2>
-      <div class="product-grid">
-        <div class="product">
-          <img src="product1.jpg" alt="Produkt 1">
-          <h3>Kette mit Anhänger</h3>
-          <p>Elegante Halskette aus feinstem Silber mit funkelndem Anhänger.</p>
-        </div>
-        <div class="product">
-          <img src="product2.jpg" alt="Produkt 2">
-          <h3>Goldenes Armband</h3>
-          <p>Fein gearbeitetes Armband, das zeitlose Schönheit ausstrahlt.</p>
-        </div>
-        <div class="product">
-          <img src="product3.jpg" alt="Produkt 3">
-          <h3>Diamant-Ohrringe</h3>
-          <p>Klassische Ohrstecker mit funkelnden Diamanten – pure Eleganz.</p>
-        </div>
-      </div>
-    </section>
-  </main>
+  <section class="gallery">
+    <div class="gallery-left">
+      <img src="your-image-1.jpg" alt="Jewellery Container Showcase - Main View">
+    </div>
+    <div>
+      <img src="your-image-2.jpg" alt="Jewellery Container - Opened View">
+    </div>
+    <div>
+      <img src="your-image-3.jpg" alt="Jewellery Container - Detail Close-Up">
+    </div>
+  </section>
 
   <footer>
-    © 2025 Schmuck-Allee · Alle Rechte vorbehalten
+    <p>&copy; 2025 Schmuck Allee. All rights reserved.</p>
   </footer>
 </body>
 </html>
