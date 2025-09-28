@@ -1,59 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Company Website</title>
+  <title>Schmuck-Allee</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      color: #333;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background: #fafafa;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
-
     header {
-      background: #fff;
-      padding: 20px;
       text-align: center;
-      border-bottom: 1px solid #eee;
+      padding: 2rem 1rem 1rem;
+      border-bottom: 1px solid #ddd;
+      background: #fff;
     }
-
     header img {
-      max-width: 180px;
+      max-width: 250px;
       height: auto;
     }
-
     main {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
-      line-height: 1.6;
+      flex: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
     }
-
-    section {
-      margin-bottom: 60px;
-    }
-
-    h1, h2 {
-      margin-bottom: 15px;
-      font-weight: 600;
-    }
-
-    footer {
+    main h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
       text-align: center;
-      padding: 20px;
-      border-top: 1px solid #eee;
-      font-size: 0.9em;
-      color: #777;
+      color: #444;
+    }
+    main p {
+      line-height: 1.7;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #555;
+    }
+    .products {
+      margin-top: 3rem;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    .product {
       background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .product:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    }
+    .product img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+    .product h3 {
+      margin: 1rem 0 0.5rem;
+      font-size: 1.2rem;
+      color: #333;
+    }
+    .product p {
+      font-size: 0.95rem;
+      color: #666;
+      margin: 0 1rem 1.2rem;
+    }
+    footer {
+      background: #333;
+      color: #eee;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="Company Logo">
+    <!-- Replace with your logo -->
+    <img src="logo.png" alt="Schmuck-Allee Logo">
   </header>
 
   <main>
@@ -88,30 +127,10 @@
         </div>
       </div>
     </section>
-    <section>
-      <h1>Welcome to Our Company</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae justo et velit feugiat dictum. Morbi dapibus bibendum velit, vitae feugiat quam fermentum vel.</p>
-    </section>
-
-    <section>
-      <h2>Our Services</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam erat volutpat. Sed tristique, leo sed blandit feugiat, lectus elit pellentesque lectus, ut dictum risus mi non risus.</p>
-    </section>
-
-    <section>
-      <h2>About Us</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ultrices, lacus sit amet vulputate varius, sapien quam lacinia risus, vel consequat turpis ipsum at neque.</p>
-    </section>
-
-    <section>
-      <h2>Contact</h2>
-      <p>Email: info@example.com<br>
-      Phone: +1 234 567 890</p>
-    </section>
   </main>
 
   <footer>
-    &copy; 2025 Your Company Name. All rights reserved.
+    © 2025 Schmuck-Allee · Alle Rechte vorbehalten
   </footer>
 </body>
 </html>
