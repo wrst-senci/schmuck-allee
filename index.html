@@ -10,18 +10,15 @@
       --bg-soft: #f7f4ef;
       --text: #2b2b2b;
       --muted: #6f6f6f;
-      --accent: #c9a24a; /* subtle gold for brand hints */
+      --accent: #c9a24a;
       --divider: #e6e2da;
-      --card: #fbfaf7;
       --radius: 12px;
       --shadow: 0 8px 24px rgba(0,0,0,0.06);
       --maxw: 1200px;
       --gap: 24px;
     }
 
-    /* Global reset & base */
     * { box-sizing: border-box; }
-    html, body { height: 100%; }
     body {
       margin: 0;
       font-family: "Inter", "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -29,375 +26,247 @@
       color: var(--text);
       line-height: 1.6;
     }
+    img { max-width: 100%; display: block; }
 
-    img { display: block; max-width: 100%; height: auto; }
-    a { color: var(--text); text-decoration: none; }
-    .container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
-    .section { padding: 80px 0; }
-    .divider { height: 1px; background: var(--divider); width: 100%; margin: 0 auto; }
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: #fff;
+      border-bottom: 1px solid var(--divider);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav img {
+      max-height: 40px;
+    }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropbtn {
+      background: none;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: #fff;
+      min-width: 160px;
+      box-shadow: var(--shadow);
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 12px 16px;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .dropdown-content a:hover {
+      background: var(--bg-soft);
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
 
-    /* Animations */
-    .reveal {
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity 700ms ease, transform 700ms ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    /* Sections */
+    .section { padding: 80px 20px; }
+    .container { max-width: var(--maxw); margin: auto; }
 
     /* Hero */
     .hero {
-      background: linear-gradient(180deg, var(--bg-soft), var(--bg));
-      padding: 120px 0 80px;
-    }
-    .hero-inner {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap);
-      align-items: center;
       text-align: center;
+      background: linear-gradient(180deg, var(--bg-soft), var(--bg));
+      padding: 120px 20px 80px;
     }
-    .hero-title {
+    .hero h1 {
       font-size: clamp(2rem, 4vw, 3rem);
-      letter-spacing: -0.02em;
-      margin: 0 0 12px;
+      margin-bottom: 12px;
+      color: var(--accent);
     }
-    .hero-tagline {
-      font-size: clamp(1rem, 2.2vw, 1.25rem);
+    .hero p {
+      font-size: 1.2rem;
       color: var(--muted);
-      margin: 0 0 32px;
+      margin-bottom: 40px;
     }
-    .hero-image-wrap {
-      display: grid;
-      place-items: center;
-    }
-    .hero-image {
-      width: min(800px, 90vw);
-      aspect-ratio: 4/3;
+    .hero img {
+      width: min(800px, 90%);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      object-fit: cover;
-      background: #eee;
+      margin: auto;
     }
 
-    /* Feature sections */
-    .features {
-      display: grid;
-      gap: 56px;
-    }
+    /* Features */
     .feature {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 36px;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
       align-items: center;
+      margin-bottom: 60px;
     }
-    .feature.reverse { grid-template-columns: 0.9fr 1.1fr; }
-    .feature-image {
-      width: 100%;
-      aspect-ratio: 4/3;
+    .feature.reverse { grid-template-columns: 1fr 1fr; direction: rtl; }
+    .feature.reverse .feature-content { direction: ltr; }
+    .feature img {
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      object-fit: cover;
-      background: #eee;
     }
-    .feature-content {
-      padding: 20px;
-      border-radius: var(--radius);
-      background: var(--card);
-      border: 1px solid var(--divider);
+    .feature-content h2 {
+      margin-bottom: 16px;
+      font-size: 1.6rem;
     }
-    .feature-heading {
-      font-size: clamp(1.25rem, 2.6vw, 1.6rem);
-      letter-spacing: -0.01em;
-      margin: 0 0 12px;
-      color: var(--text);
-    }
-    .feature-bullets {
+    .feature-content ul {
       list-style: none;
       padding: 0;
       margin: 0;
-      display: grid;
-      gap: 10px;
     }
-    .feature-bullets li {
-      display: grid;
-      gap: 6px;
-      align-items: start;
+    .feature-content li {
+      margin-bottom: 10px;
+      font-weight: 500;
     }
-    .feature-bullets li::marker { content: ""; }
-    .lead { font-weight: 600; }
-    .muted { color: var(--muted); font-weight: 400; }
 
     /* Gallery */
     .gallery {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: var(--gap);
-      align-items: center;
     }
     .gallery img {
-      width: 100%;
       height: 260px;
       object-fit: cover;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      background: #eee;
     }
 
-    /* Info / specs grid */
-    .info {
+    /* Specs */
+    .specs {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: var(--gap);
     }
     .spec {
-      padding: 24px;
+      padding: 20px;
       border: 1px solid var(--divider);
       border-radius: var(--radius);
-      background: var(--bg);
+      text-align: center;
     }
     .spec-icon {
       width: 40px; height: 40px;
+      margin: auto auto 12px;
       border-radius: 8px;
       background: var(--bg-soft);
-      border: 1px solid var(--divider);
-      display: grid; place-items: center;
-      margin-bottom: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold;
       color: var(--accent);
-      font-weight: 700;
-      font-size: 14px;
     }
-    .spec-label { font-weight: 600; margin-bottom: 6px; }
-    .spec-desc { color: var(--muted); }
 
     /* Footer */
     footer {
-      padding: 40px 0 56px;
-      border-top: 1px solid var(--divider);
-      background: var(--bg);
-    }
-    .footer-inner {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-      justify-items: center;
       text-align: center;
-    }
-    .footer-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      padding: 40px 20px;
+      border-top: 1px solid var(--divider);
       color: var(--muted);
     }
-    .footer-brand img {
-      width: 26px; height: 26px; border-radius: 6px;
+    footer img {
+      max-height: 30px;
+      margin-bottom: 10px;
     }
-    .footer-links {
-      display: flex; gap: 16px; flex-wrap: wrap;
-      justify-content: center;
-    }
-    .footer-links a { color: var(--muted); }
-    .footer-links a:hover { color: var(--text); }
 
-    /* Responsiveness */
-    @media (max-width: 1024px) {
-      .feature, .feature.reverse { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 720px) {
-      .section { padding: 60px 0; }
-      .gallery { grid-template-columns: 1fr; }
-      .gallery img { height: 220px; }
-      .info { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 420px) {
-      .info { grid-template-columns: 1fr; }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .feature, .feature.reverse { grid-template-columns: 1fr; direction: ltr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Hero -->
-  <section class="hero section">
-    <div class="container hero-inner reveal">
-      <h1 class="hero-title">--placeholder [Product Name]--</h1>
-      <p class="hero-tagline">--placeholder [A refined, minimal tagline that captures the essence of the product]--</p>
-      <div class="hero-image-wrap">
-        <img class="hero-image" src="your-image-1.png" alt="Centered product image">
+  <!-- Navbar -->
+  <nav>
+    <a href="index.html"><img src="logo.png" alt="Schmuck Allee Logo"></a>
+    <div class="dropdown">
+      <button class="dropbtn">Menu ▾</button>
+      <div class="dropdown-content">
+        <a href="#infos">Infos</a>
       </div>
     </div>
-  </section>
+  </nav>
 
-  <div class="divider"></div>
+  <!-- Hero -->
+  <section class="hero">
+    <h1>--placeholder [Product Name]--</h1>
+    <p>--placeholder [Minimal tagline here]--</p>
+    <img src="your-image-1.png" alt="Main product image">
+  </section>
 
   <!-- Features -->
-  <section class="section">
-    <div class="container features">
-      <!-- Feature 1 -->
-      <div class="feature reveal">
-        <img class="feature-image" src="your-image-2.png" alt="Product detail view">
-        <div class="feature-content">
-          <h3 class="feature-heading">--placeholder [Bold headline: Craft & Precision]--</h3>
-          <ul class="feature-bullets">
-            <li>
-              <span class="lead">--placeholder [Lead point]--</span>
-              <span class="muted">--placeholder [Short supporting line]--</span>
-            </li>
-            <li>
-              <span class="lead">--placeholder [Lead point]--</span>
-              <span class="muted">--placeholder [Short supporting line]--</span>
-            </li>
-          </ul>
-        </div>
+  <section class="section container">
+    <div class="feature">
+      <img src="your-image-2.png" alt="Feature 1">
+      <div class="feature-content">
+        <h2>--placeholder [Craft & Precision]--</h2>
+        <ul>
+          <li>--placeholder [Bullet point]--</li>
+          <li>--placeholder [Bullet point]--</li>
+        </ul>
       </div>
-      <!-- Feature 2 -->
-      <div class="feature reverse reveal">
-        <div class="feature-content">
-          <h3 class="feature-heading">--placeholder [Bold headline: Design & Comfort]--</h3>
-          <ul class="feature-bullets">
-            <li>
-              <span class="lead">--placeholder [Lead point]--</span>
-              <span class="muted">--placeholder [Short supporting line]--</span>
-            </li>
-            <li>
-              <span class="lead">--placeholder [Lead point]--</span>
-              <span class="muted">--placeholder [Short supporting line]--</span>
-            </li>
-          </ul>
-        </div>
-        <img class="feature-image" src="your-image-3.png" alt="Product lifestyle view">
-      </div>
-      <!-- Feature 3 -->
-      <div class="feature reveal">
-        <img class="feature-image" src="your-image-4.png" alt="Material close-up">
-        <div class="feature-content">
-          <h3 class="feature-heading">--placeholder [Bold headline: Materials & Finish]--</h3>
-          <ul class="feature-bullets">
-            <li>
-              <span class="lead">--placeholder [Lead point]--</span>
-              <span class="muted">--placeholder [Short supporting line]--</span>
-            </li>
-            <li>
-              <span class="lead">--placeholder [Lead point]--</span>
-              <span class="muted">--placeholder [Short supporting line]--</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <!-- Feature 4 (optional, can remove) -->
-      <div class="feature reverse reveal">
-        <div class="feature-content">
-          <h3 class="feature-heading">--placeholder [Bold headline: Everyday Reliability]--</h3>
-          <ul class="feature-bullets">
-            <li>
-              <span class="lead">--placeholder [Lead point]--</span>
-              <span class="muted">--placeholder [Short supporting line]--</span>
-            </li>
-            <li>
-              <span class="lead">--placeholder [Lead point]--</span>
-              <span class="muted">--placeholder [Short supporting line]--</span>
-            </li>
-          </ul>
-        </div>
-        <img class="feature-image" src="your-image-5.png" alt="Product on model">
+    </div>
+    <div class="feature reverse">
+      <img src="your-image-3.png" alt="Feature 2">
+      <div class="feature-content">
+        <h2>--placeholder [Design & Comfort]--</h2>
+        <ul>
+          <li>--placeholder [Bullet point]--</li>
+          <li>--placeholder [Bullet point]--</li>
+        </ul>
       </div>
     </div>
   </section>
-
-  <div class="divider"></div>
 
   <!-- Gallery -->
-  <section class="section">
-    <div class="container reveal">
-      <div class="gallery">
-        <img src="your-image-6.png" alt="Product in context 1">
-        <img src="your-image-7.png" alt="Product in context 2">
-        <img src="your-image-8.png" alt="Product in context 3">
-      </div>
+  <section class="section container">
+    <div class="gallery">
+      <img src="your-image-4.png" alt="Gallery 1">
+      <img src="your-image-5.png" alt="Gallery 2">
+      <img src="your-image-6.png" alt="Gallery 3">
     </div>
   </section>
 
-  <div class="divider"></div>
-
-  <!-- Info / Specs -->
-  <section class="section">
-    <div class="container info reveal">
+  <!-- Infos / Specs -->
+  <section id="infos" class="section container">
+    <h2 style="text-align:center; margin-bottom:40px;">Product Information</h2>
+    <div class="specs">
       <div class="spec">
         <div class="spec-icon">SZ</div>
-        <div class="spec-label">--placeholder [Size]--</div>
-        <div class="spec-desc">--placeholder [Short size details]--</div>
+        <div>--placeholder [Size details]--</div>
       </div>
       <div class="spec">
         <div class="spec-icon">MT</div>
-        <div class="spec-label">--placeholder [Material]--</div>
-        <div class="spec-desc">--placeholder [Short material details]--</div>
+        <div>--placeholder [Material]--</div>
       </div>
       <div class="spec">
         <div class="spec-icon">CL</div>
-        <div class="spec-label">--placeholder [Color options]--</div>
-        <div class="spec-desc">--placeholder [Available colors]--</div>
+        <div>--placeholder [Color options]--</div>
       </div>
       <div class="spec">
         <div class="spec-icon">WT</div>
-        <div class="spec-label">--placeholder [Weight]--</div>
-        <div class="spec-desc">--placeholder [Approximate weight]--</div>
-      </div>
-      <div class="spec">
-        <div class="spec-icon">FN</div>
-        <div class="spec-label">--placeholder [Finish]--</div>
-        <div class="spec-desc">--placeholder [Polish/texture details]--</div>
-      </div>
-      <div class="spec">
-        <div class="spec-icon">CR</div>
-        <div class="spec-label">--placeholder [Care]--</div>
-        <div class="spec-desc">--placeholder [Care instructions]--</div>
-      </div>
-      <div class="spec">
-        <div class="spec-icon">WR</div>
-        <div class="spec-label">--placeholder [Warranty]--</div>
-        <div class="spec-desc">--placeholder [Warranty terms]--</div>
-      </div>
-      <div class="spec">
-        <div class="spec-icon">PK</div>
-        <div class="spec-label">--placeholder [Packaging]--</div>
-        <div class="spec-desc">--placeholder [Packaging details]--</div>
+        <div>--placeholder [Weight]--</div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <img src="logo.png" alt="Schmuck Allee logo">
-        <span>Schmuck Allee</span>
-      </div>
-      <div class="footer-links">
-        <a href="#">--placeholder [Contact]--</a>
-        <a href="#">--placeholder [Instagram]--</a>
-        <a href="#">--placeholder [Facebook]--</a>
-        <a href="#">--placeholder [Email]--</a>
-      </div>
-      <small class="muted">&copy; 2025 Schmuck Allee</small>
-    </div>
+    <img src="logo.png" alt="Schmuck Allee Logo">
+    <div>Schmuck Allee</div>
+    <div>--placeholder [Contact info / social links]--</div>
+    <small>&copy; 2025 Schmuck Allee</small>
   </footer>
 
-  <script>
-    // Smooth reveal on scroll using IntersectionObserver
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
-
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // Optional: smooth scroll behavior for the whole page
-    document.documentElement.style.scrollBehavior = 'smooth';
-  </script>
 </body>
 </html>
