@@ -5,61 +5,203 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Schmuck Allee</title>
   <style>
+    /* Global Styles */
     body {
       margin: 0;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      background-color: #f9f9f9;
+      background-color: #fdfdfd;
       color: #333;
+      line-height: 1.6;
     }
 
+    h1, h2, h3 {
+      font-family: Georgia, serif;
+      color: #c9a24a;
+      margin-top: 0;
+    }
+
+    p {
+      margin: 0 0 1em;
+    }
+
+    a {
+      color: #c9a24a;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Header */
     header {
-      text-align: center;
-      padding: 40px 20px 20px;
-      background-color: #fff;
+      background: #fff;
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
     }
 
     header img {
-      max-width: 160px;
+      max-width: 140px;
       margin-bottom: 10px;
     }
 
     header h1 {
-      font-family: Georgia, serif;
-      font-size: 2rem;
-      color: #c9a24a;
+      font-size: 2.2rem;
       margin: 0;
     }
 
-    .intro {
+    /* Hero Section */
+    .hero {
+      background: url("your-image-1.png") center/cover no-repeat;
+      color: #fff;
       text-align: center;
-      padding: 30px 20px;
+      padding: 120px 20px;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
       max-width: 800px;
       margin: auto;
-      font-size: 1.1rem;
-      line-height: 1.6;
     }
 
-    .gallery {
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+    }
+
+    /* About Us */
+    .about {
+      max-width: 1000px;
+      margin: 60px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .about h2 {
+      margin-bottom: 20px;
+    }
+
+    /* Product Highlights */
+    .products {
+      background: #fafafa;
+      padding: 60px 20px;
+    }
+
+    .products h2 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+      gap: 30px;
       max-width: 1000px;
-      margin: 40px auto;
-      padding: 0 20px;
+      margin: auto;
     }
 
-    .gallery img {
-      width: 100%;
-      height: auto;
+    .product {
+      background: #fff;
       border-radius: 8px;
-      object-fit: cover;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: transform 0.3s ease;
     }
 
+    .product:hover {
+      transform: translateY(-5px);
+    }
+
+    .product img {
+      width: 100%;
+      display: block;
+    }
+
+    .product-content {
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .testimonial {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      font-style: italic;
+    }
+
+    .testimonial strong {
+      display: block;
+      margin-top: 15px;
+      font-style: normal;
+      color: #c9a24a;
+    }
+
+    /* Call to Action */
+    .cta {
+      background: #c9a24a;
+      color: #fff;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .cta h2 {
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .cta a {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 30px;
+      background: #fff;
+      color: #c9a24a;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .cta a:hover {
+      background: #f0f0f0;
+    }
+
+    /* Footer */
     footer {
       text-align: center;
       padding: 30px 20px;
-      background-color: #fff;
+      background: #fff;
       font-size: 0.9rem;
       color: #555;
       border-top: 1px solid #eee;
@@ -72,18 +214,71 @@
     <h1>Schmuck Allee</h1>
   </header>
 
-  <section class="intro">
-    <p>--placeholder [whatever text this might be]--</p>
+  <section class="hero">
+    <div class="hero-content">
+      <h2>--placeholder [Your Hero Headline Here]--</h2>
+      <p>--placeholder [A captivating tagline or mission statement goes here]--</p>
+    </div>
   </section>
 
-  <section class="gallery">
-    <img src="your-image-1.png" alt="Product Image 1" />
-    <img src="your-image-2.png" alt="Product Image 2" />
-    <img src="your-image-3.png" alt="Product Image 3" />
+  <section class="about">
+    <h2>About Us</h2>
+    <p>--placeholder [Tell your story: who you are, your values, your craftsmanship, your inspiration. This is where you connect emotionally with your audience.]--</p>
+  </section>
+
+  <section class="products">
+    <h2>Our Collection</h2>
+    <div class="product-grid">
+      <div class="product">
+        <img src="your-image-2.png" alt="Product 1" />
+        <div class="product-content">
+          <h3>--placeholder [Product Name]--</h3>
+          <p>--placeholder [Short description of the product highlighting its uniqueness]--</p>
+        </div>
+      </div>
+      <div class="product">
+        <img src="your-image-3.png" alt="Product 2" />
+        <div class="product-content">
+          <h3>--placeholder [Product Name]--</h3>
+          <p>--placeholder [Short description of the product highlighting its uniqueness]--</p>
+        </div>
+      </div>
+      <div class="product">
+        <img src="your-image-4.png" alt="Product 3" />
+        <div class="product-content">
+          <h3>--placeholder [Product Name]--</h3>
+          <p>--placeholder [Short description of the product highlighting its uniqueness]--</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <h2>What Our Clients Say</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial">
+        <p>"--placeholder [A glowing testimonial about your product or service]--"</p>
+        <strong>--placeholder [Client Name]--</strong>
+      </div>
+      <div class="testimonial">
+        <p>"--placeholder [Another testimonial that builds trust and credibility]--"</p>
+        <strong>--placeholder [Client Name]--</strong>
+      </div>
+      <div class="testimonial">
+        <p>"--placeholder [A short but powerful endorsement]--"</p>
+        <strong>--placeholder [Client Name]--</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>--placeholder [Final Call to Action Headline]--</h2>
+    <p>--placeholder [Encourage visitors to shop, contact you, or explore your collection]--</p>
+    <a href="#">--placeholder [Button Text]--</a>
   </section>
 
   <footer>
-    <p>&copy; 2025 Schmuck Allee. --placeholder [footer text]--</p>
+    <p>&copy; 2025 Schmuck Allee. --placeholder [Footer text or links]--</p>
   </footer>
 </body>
 </html>
