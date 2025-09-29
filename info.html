@@ -5,6 +5,139 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Infos - Schmuck Allee</title>
   <style>
+    :root {
+      --bg: #ffffff;
+      --bg-soft: #f7f4ef;
+      --text: #2b2b2b;
+      --muted: #6f6f6f;
+      --accent: #c9a24a;
+      --divider: #e6e2da;
+      --radius: 12px;
+      --shadow: 0 8px 24px rgba(0,0,0,0.06);
+      --maxw: 900px;
+    }
+
     body {
       margin: 0;
-      font-family: "Inter", "Poppins
+      font-family: "Inter", "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    img { max-width: 100%; display: block; }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: #fff;
+      border-bottom: 1px solid var(--divider);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav img { max-height: 40px; }
+    .dropdown { position: relative; display: inline-block; }
+    .dropbtn {
+      background: none; border: none;
+      font-size: 1rem; cursor: pointer;
+      font-weight: 600; color: var(--text);
+    }
+    .dropdown-content {
+      display: none; position: absolute; right: 0;
+      background: #fff; min-width: 160px;
+      box-shadow: var(--shadow);
+    }
+    .dropdown-content a {
+      display: block; padding: 12px 16px;
+      color: var(--text); text-decoration: none;
+    }
+    .dropdown-content a:hover { background: var(--bg-soft); }
+    .dropdown:hover .dropdown-content { display: block; }
+
+    /* Page content */
+    .section {
+      max-width: var(--maxw);
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+    .section h1, .section h2 {
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .section p {
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+    .divider {
+      height: 1px;
+      background: var(--divider);
+      margin: 60px auto;
+      max-width: var(--maxw);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid var(--divider);
+      color: var(--muted);
+    }
+    footer img { max-height: 30px; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <a href="index.html"><img src="logo.png" alt="Schmuck Allee Logo"></a>
+    <div class="dropdown">
+      <button class="dropbtn">Menu ▾</button>
+      <div class="dropdown-content">
+        <a href="index.html">Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- About -->
+  <section class="section">
+    <h1>About Schmuck Allee</h1>
+    <p>--placeholder [Tell your story: origins, philosophy, and what makes your product unique. Keep it concise and elegant.]--</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Details / Story -->
+  <section class="section">
+    <h2>Our Craft</h2>
+    <p>--placeholder [Describe the craftsmanship, materials, and design inspiration. Highlight the values of quality, precision, and timeless design.]--</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Care Instructions -->
+  <section class="section">
+    <h2>Care Instructions</h2>
+    <p>--placeholder [Provide simple steps for maintaining the product’s beauty and longevity. Example: Store in a dry place, clean with a soft cloth, avoid harsh chemicals.]--</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Contact -->
+  <section class="section">
+    <h2>Contact & Social</h2>
+    <p>--placeholder [Provide an email address, phone number, or social media links for inquiries.]--</p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <img src="logo.png" alt="Schmuck Allee Logo">
+    <div>Schmuck Allee</div>
+    <div>--placeholder [Contact info / social links]--</div>
+    <small>&copy; 2025 Schmuck Allee</small>
+  </footer>
+
+</body>
+</html>
