@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Schmuck Allee</title>
   <style>
     body {
@@ -15,16 +15,16 @@
     header {
       text-align: center;
       padding: 40px 20px 20px;
-      background: white;
+      background-color: #fff;
     }
 
     header img {
-      max-width: 180px;
+      max-width: 160px;
       margin-bottom: 10px;
     }
 
     header h1 {
-      font-family: "Georgia", serif;
+      font-family: Georgia, serif;
       font-size: 2rem;
       color: #c9a24a;
       margin: 0;
@@ -41,15 +41,11 @@
 
     .gallery {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
       max-width: 1000px;
       margin: 40px auto;
       padding: 0 20px;
-    }
-
-    .gallery-left {
-      grid-row: span 2;
     }
 
     .gallery img {
@@ -63,7 +59,7 @@
     footer {
       text-align: center;
       padding: 30px 20px;
-      background: #fff;
+      background-color: #fff;
       font-size: 0.9rem;
       color: #555;
       border-top: 1px solid #eee;
@@ -72,30 +68,22 @@
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="Schmuck Allee Logo">
+    <img src="logo.png" alt="Schmuck Allee Logo" />
     <h1>Schmuck Allee</h1>
   </header>
 
   <section class="intro">
-    <p>
----PLACEHOLDER---
-    </p>
+    <p>--placeholder [whatever text this might be]--</p>
   </section>
 
   <section class="gallery">
-    <div class="gallery-left">
-      <img src="your-image-1.jpg" alt="bild1">
-    </div>
-    <div>
-      <img src="your-image-2.jpg" alt="bild2">
-    </div>
-    <div>
-      <img src="your-image-3.jpg" alt="bild3">
-    </div>
+    <img src="your-image-1.png" alt="Product Image 1" />
+    <img src="your-image-2.png" alt="Product Image 2" />
+    <img src="your-image-3.png" alt="Product Image 3" />
   </section>
 
   <footer>
-    <p>&copy; 2025 Schmuck Allee.</p>
+    <p>&copy; 2025 Schmuck Allee. --placeholder [footer text]--</p>
   </footer>
 </body>
 </html>
