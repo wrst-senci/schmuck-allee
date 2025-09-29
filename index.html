@@ -133,8 +133,19 @@
       text-align: center;
       white-space: nowrap;
     }
-    /* Footer */
-    footer {
+    .maße {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 24px;
+        margin-top: 8px;
+    }
+    .maße div {
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+  
+      /* Footer */
+      footer {
       text-align: center;
       padding: 40px 20px;
       border-top: 1px solid var(--divider);
@@ -205,7 +216,13 @@
   <section class="section container">
     <h2 style="text-align:center; margin-bottom:40px;">Produkt Information</h2>
     <div class="specs">
-      <div class="spec"><div class="spec-icon">Maße</div><div>Außen Ø: 21cm <br> Innen Ø: 17cm <br> Höhe: 7cm <br> Tiefe: 5cm </div></div>
+      <div class="spec"><div class="spec-icon">Maße</div><div>
+        <div class="Maße">
+          <div>Außen Ø: 21cm</div>
+          <div>Innen Ø: 17cm</div>
+          <div>Höhe: 7cm</div>
+          <div>Tiefe: 5cm</div>
+        </div></div></div>
       <div class="spec"><div class="spec-icon">Material</div><div>Baum: Pappelholz <br> (4mm) Schüssel: Holz</div></div>
       <div class="spec"><div class="spec-icon">Gewicht</div><div>--placeholder [Weight]--</div></div>
     </div>
