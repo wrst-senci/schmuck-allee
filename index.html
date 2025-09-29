@@ -116,7 +116,6 @@
     .specs {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      align-items: start;
       gap: var(--gap);
     }
     .spec {
@@ -124,12 +123,16 @@
       border-radius: var(--radius); text-align: center;
     }
     .spec-icon {
-      width: 40px; height: 40px; margin: auto auto 12px;
-      border-radius: 8px; background: var(--bg-soft);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: bold; color: var(--accent);
+      display: inline-block;
+      padding: 8px 16px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      background: var(--bg-soft);
+      font-weight: bold;
+      color: var(--accent);
+      text-align: center;
+      white-space: nowrap;
     }
-
     /* Footer */
     footer {
       text-align: center;
