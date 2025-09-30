@@ -184,6 +184,35 @@
     }
   
       /* Footer */
+      .site-footer {
+        background: #f8f8f8;
+        padding: 2rem 1rem;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #555;
+        border-top: 1px solid #e0e0e0;
+      }
+      
+      .footer-logo {
+        height: 40px;
+        margin-bottom: 1rem;
+        opacity: 0.9;
+      }
+      
+      .footer-nav {
+        margin-top: 1rem;
+      }
+      
+      .footer-nav a {
+        margin: 0 0.75rem;
+        color: #555;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+      
+      .footer-nav a:hover {
+        color: goldenrod;
+      }
       footer {
       text-align: center;
       padding: 40px 20px;
@@ -196,6 +225,19 @@
     @media (max-width: 900px) {
       .feature, .feature.reverse { grid-template-columns: 1fr; direction: ltr; }
     }
+    
+    /* Scroll */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+      
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    
   </style>
 </head>
 <body>
@@ -219,10 +261,10 @@
   </section>
 
   <!-- Features -->
-  <section class="section container">
+  <section class="section container fade-in">
     <div class="feature">
       <img src="product2.png" alt="Feature 1">
-      <div class="feature-content">
+      <div class="feature-content fade-in">
         <h2>Handgebaut von uns, für euch</h2>
         <ul>
           <li>In der TGM Werkstätte selbst gemacht</li>
@@ -230,9 +272,9 @@
         </ul>
       </div>
     </div>
-    <div class="feature reverse">
+    <div class="feature reverse fade-in">
       <img src="product3.png" alt="Feature 2">
-      <div class="feature-content">
+      <div class="feature-content fade-in">
         <h2>Selbst gemachtes Design</h2>
         <ul>
           <li>Perfekt für all ihren Schmuck</li>
@@ -262,12 +304,17 @@
   </section>
 
   <!-- Footer -->
-  <footer>
-    <img src="logo.png" alt="Schmuck Allee Logo">
-    <div>Schmuck Allee</div>
-    <div>--placeholder [Contact info / social links]--</div>
-    <small>&copy; 2025 Schmuck Allee</small>
-  </footer>
+<footer class="site-footer">
+  <div class="footer-content">
+    <img src="logo.png" alt="Schmuck Allee Logo" class="footer-logo">
+    <p>&copy; 2025 Schmuck Allee · Weil jedes Stück zählt</p>
+    <nav class="footer-nav">
+      <a href="#about">About</a>
+      <a href="#shop">Shop</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</footer>
   
   <script>
   document.querySelectorAll('.lightbox').forEach(link => {
@@ -280,7 +327,26 @@
       overlay.addEventListener('click', () => document.body.removeChild(overlay));
       document.body.appendChild(overlay);
     });
-  });
+    });
+      const faders = document.querySelectorAll('.fade-in');
+  
+    const appearOptions = {
+      threshold: 0.2,
+      rootMargin: "0px 0px -50px 0px"
+    };
+    
+    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      });
+    }, appearOptions);
+    
+    faders.forEach(fader => {
+      appearOnScroll.observe(fader);
+    });
+
   </script>
 
 </body>
