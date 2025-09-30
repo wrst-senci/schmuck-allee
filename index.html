@@ -320,15 +320,8 @@
   <footer class="site-footer">
     <div class="footer-content fade-in">
       <p>&copy; 2025 Schmuck Allee · Weil jedes Stück zählt</p>
-      <a href="#" id="impressum-link">Impressum</a>
-    </div>
-  </footer>
-  
-  <div id="impressum-modal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Impressum</h2>
       <p>
+        Impressum<br>
         Schmuck Allee<br>
         Musterstraße 1<br>
         1010 Wien<br>
@@ -336,8 +329,7 @@
         E-Mail: kontakt@schmuckallee.at
       </p>
     </div>
-  </div>
-  
+  </footer>
     
   <script>
     document.querySelectorAll('.lightbox').forEach(link => {
@@ -369,27 +361,6 @@
       faders.forEach(fader => {
         appearOnScroll.observe(fader);
       });
-  
-      
-      const impressumLink = document.getElementById('impressum-link');
-      const impressumModal = document.getElementById('impressum-modal');
-      const closeBtn = impressumModal.querySelector('.close');
-      
-      impressumLink.addEventListener('click', e => {
-        e.preventDefault();
-        impressumModal.style.display = 'flex';
-      });
-      
-      closeBtn.addEventListener('click', () => {
-        impressumModal.style.display = 'none';
-      });
-      
-      window.addEventListener('click', e => {
-        if (e.target === impressumModal) {
-          impressumModal.style.display = 'none';
-        }
-      });
-  
   </script>
 
 </body>
