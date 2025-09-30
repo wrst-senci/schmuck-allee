@@ -200,7 +200,7 @@
       }
       
       .footer-nav {
-        margin-top: 1rem;
+        margin-top: 0.5rem;
       }
       
       .footer-nav a {
@@ -345,80 +345,80 @@
   </section>
 
   <!-- Footer -->
-<footer class="site-footer">
-  <div class="footer-content fade-in">
-    <img src="logo.png" alt="Schmuck Allee Logo" class="footer-logo">
-    <p>&copy; 2025 Schmuck Allee · Weil jedes Stück zählt</p>
-    <a href="#" id="impressum-link">Impressum</a>
-  </div>
-</footer>
-
-<div id="impressum-modal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Impressum</h2>
-    <p>
-      Schmuck Allee<br>
-      Musterstraße 1<br>
-      1010 Wien<br>
-      Österreich<br>
-      E-Mail: kontakt@schmuckallee.at
-    </p>
-  </div>
-</div>
-
+  <footer class="site-footer">
+    <div class="footer-content fade-in">
+      <img src="logo.png" alt="Schmuck Allee Logo" class="footer-logo">
+      <p>&copy; 2025 Schmuck Allee · Weil jedes Stück zählt</p>
+      <a href="#" id="impressum-link">Impressum</a>
+    </div>
+  </footer>
   
+  <div id="impressum-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Impressum</h2>
+      <p>
+        Schmuck Allee<br>
+        Musterstraße 1<br>
+        1010 Wien<br>
+        Österreich<br>
+        E-Mail: kontakt@schmuckallee.at
+      </p>
+    </div>
+  </div>
+  
+    
   <script>
-  document.querySelectorAll('.lightbox').forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const src = link.getAttribute('href');
-      const overlay = document.createElement('div');
-      overlay.className = 'lightbox-overlay';
-      overlay.innerHTML = `<img src="${src}" alt="">`;
-      overlay.addEventListener('click', () => document.body.removeChild(overlay));
-      document.body.appendChild(overlay);
-    });
-    });
-      const faders = document.querySelectorAll('.fade-in');
-  
-    const appearOptions = {
-      threshold: 0.2,
-      rootMargin: "0px 0px -50px 0px"
-    };
-    
-    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+    document.querySelectorAll('.lightbox').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const src = link.getAttribute('href');
+        const overlay = document.createElement('div');
+        overlay.className = 'lightbox-overlay';
+        overlay.innerHTML = `<img src="${src}" alt="">`;
+        overlay.addEventListener('click', () => document.body.removeChild(overlay));
+        document.body.appendChild(overlay);
       });
-    }, appearOptions);
+      });
+        const faders = document.querySelectorAll('.fade-in');
     
-    faders.forEach(fader => {
-      appearOnScroll.observe(fader);
-    });
-
-    
-    const impressumLink = document.getElementById('impressum-link');
-    const impressumModal = document.getElementById('impressum-modal');
-    const closeBtn = impressumModal.querySelector('.close');
-    
-    impressumLink.addEventListener('click', e => {
-      e.preventDefault();
-      impressumModal.style.display = 'flex';
-    });
-    
-    closeBtn.addEventListener('click', () => {
-      impressumModal.style.display = 'none';
-    });
-    
-    window.addEventListener('click', e => {
-      if (e.target === impressumModal) {
+      const appearOptions = {
+        threshold: 0.2,
+        rootMargin: "0px 0px -50px 0px"
+      };
+      
+      const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        });
+      }, appearOptions);
+      
+      faders.forEach(fader => {
+        appearOnScroll.observe(fader);
+      });
+  
+      
+      const impressumLink = document.getElementById('impressum-link');
+      const impressumModal = document.getElementById('impressum-modal');
+      const closeBtn = impressumModal.querySelector('.close');
+      
+      impressumLink.addEventListener('click', e => {
+        e.preventDefault();
+        impressumModal.style.display = 'flex';
+      });
+      
+      closeBtn.addEventListener('click', () => {
         impressumModal.style.display = 'none';
-      }
-    });
-
+      });
+      
+      window.addEventListener('click', e => {
+        if (e.target === impressumModal) {
+          impressumModal.style.display = 'none';
+        }
+      });
+  
   </script>
 
 </body>
