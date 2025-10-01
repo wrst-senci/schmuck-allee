@@ -26,6 +26,26 @@
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
+      position: relative;
+    
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 60px;              /* thickness of the bars */
+        background: #eed9c4;      /* beige color */
+        z-index: -1;              /* behind content */
+      }
+      
+      body::before {
+        left: 0;
+      }
+      
+      body::after {
+        right: 0;
+      }
     }
     img { max-width: 100%; display: block; }
 
