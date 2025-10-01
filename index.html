@@ -20,19 +20,22 @@
     }
 
     * { box-sizing: border-box; }
+    
     body {
       margin: 0;
       font-family: "Inter", "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
       background:
-      linear-gradient(to right,
-      #eed9c4 60px,
-      transparent 60px,
-      transparent calc(100% - 60px),
-      #eed9c4 calc(100% - 60px)
-    ),
-      linear-gradient(180deg, var(--bg-soft), var(--bg));
+        /* horizontal beige bars */
+        linear-gradient(to right,
+          #eed9c4 60px,                /* left bar */
+          transparent 60px,
+          transparent calc(100% - 60px),
+          #eed9c4 calc(100% - 60px)    /* right bar */
+        ),
+        /* vertical gradient */
+        linear-gradient(180deg, var(--bg-soft), var(--bg));
       background-repeat: no-repeat;
-      background-attachment: scroll;
+      background-attachment: scroll; /* ensures gradient scrolls with content */
     }
     
     img { max-width: 100%; display: block; }
@@ -72,15 +75,19 @@
     .section { padding: 80px 20px; }
     .container { max-width: var(--maxw); margin: auto; }
 
-     /* Hero */
+    /* Hero */
     .hero {
       text-align: center;
+      /* combine bars + vertical gradient so hero doesn’t override body */
       background:
         linear-gradient(to right,
-        #eed9c4 60px,
-        transparent 60px,
-        transparent calc(100% - 60px),
-        #eed9c4 calc(100% - 60px)
+          #eed9c4 60px,
+          transparent 60px,
+          transparent calc(100% - 60px),
+          #eed9c4 calc(100% - 60px)
+        ),
+        linear-gradient(180deg, var(--bg-soft), var(--bg));
+      padding: 120px 20px 80px;
     }
 
     .hero h1 {
