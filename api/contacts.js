@@ -1,4 +1,4 @@
-// pages/api/contact.js
+// /api/contact.js
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -19,7 +19,7 @@ export default async function handler(req, res) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Schmuck Allee <onboarding@resend.dev>", // sandbox sender
+        from: "onboarding@resend.dev", // sandbox sender
         to: process.env.CONTACT_TO_EMAIL,             // your private email in Vercel env vars
         subject: `Neue Nachricht von ${name}`,
         html: `
