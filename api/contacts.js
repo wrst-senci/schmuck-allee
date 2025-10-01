@@ -19,8 +19,8 @@ export default async function handler(req, res) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        from: "Schmuck Allee <no-reply@schmuckallee.at>",
-        to: "your-real-email@example.com", // stays hidden in env vars if you prefer
+        from: "Schmuck Allee <onboarding@resend.dev>",
+        to: process.env.CONTACT_TO_EMAIL, // stays hidden in env vars if you prefer
         subject: `Neue Nachricht von ${name}`,
         html: `<p><strong>Name:</strong> ${name}</p>
                <p><strong>Email:</strong> ${email}</p>
