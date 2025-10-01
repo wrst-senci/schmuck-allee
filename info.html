@@ -118,53 +118,6 @@
 
   <div class="divider"></div>
   
-  <!-- Kontakt -->
-  <section class="section">
-    <h2>Kontakt</h2>
- <form id="contact-form">
-  <input type="text" name="name" required>
-  <input type="email" name="email" required>
-  <textarea name="message" required></textarea>
-  <button type="submit">Absenden</button>
-  </form>
-  
-  <p id="form-status"></p>
-  
-  <script>
-    const form = document.getElementById('contact-form');
-    const status = document.getElementById('form-status');
-  
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      status.textContent = "Sende Nachricht…";
-  
-      const data = {
-        name: form.name.value,
-        email: form.email.value,
-        message: form.message.value
-      };
-  
-      try {
-        const res = await fetch('/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-  
-        const result = await res.json();
-        if (res.ok) {
-          status.textContent = "Danke! Nachricht gesendet.";
-          form.reset();
-        } else {
-          status.textContent = `Fehler: ${result.error || 'Unbekannter Fehler'}`;
-        }
-      } catch (err) {
-        status.textContent = "Netzwerkfehler. Bitte später erneut versuchen.";
-        console.error("Frontend error:", err);
-      }
-    });
-  </script>
-
   <!-- Footer -->
   <footer>
     <img src="logo.png" alt="Schmuck Allee Logo">
