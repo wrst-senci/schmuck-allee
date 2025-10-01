@@ -1,51 +1,71 @@
 // api/contact.js
+import { Resend } from 'resend';
 
-module.exports = async (req, res) => {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-  // Parse JSON body (Vercel doesn't auto-parse in Node functions)
-  let body = {};
-  try {
-    body = req.body && typeof req.body === "object" ? req.body : JSON.parse(req.body || "{}");
-  } catch {
-    return res.status(400).json({ error: "Invalid JSON" });
-  }
-
-  const { name, email, message } = body;
-  if (!name || !email || !message) {
-    return res.status(400).json({ error: "Missing fields" });
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', ['POST']);
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
   try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "Schmuck Allee <onboarding@resend.dev>", // sandbox sender
-        to: process.env.CONTACT_TO_EMAIL,              // your inbox (set in Vercel)
-        subject: `Neue Nachricht von ${name}`,
-        html: `
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Nachricht:</strong><br>${message}</p>
-        `,
-      }),
-    });
+    const { name, email, message } = req.body || {};
 
-    const text = await response.text();
-    if (!response.ok) {
-      console.error("Resend API error:", response.status, text);
-      return res.status(502).json({ error: "Email send failed", detail: text });
+    if (!name || !email || !message) {
+      return res.status(400).json({
+        ok: false,
+        error: 'Missing required fields',
+        details: { name: !!name, email: !!email, message: !!message },
+      });
     }
 
-    return res.status(200).json({ success: true });
+    const from = process.env.CONTACT_FROM; // e.g., "Contact <contact@yourdomain.com>"
+    const to = process.env.CONTACT_TO;     // your private inbox/server-side only
+    if (!from || !to) {
+      return res.status(500).json({
+        ok: false,
+        error: 'Server misconfiguration',
+        detail: 'CONTACT_FROM and CONTACT_TO must be set',
+      });
+    }
+
+    const result = await resend.emails.send({
+      from,
+      to,
+      reply_to: email,
+      subject: `New website message from ${name}`,
+      text: message,
+      html: `
+        <div style="font-family:system-ui,sans-serif;line-height:1.5">
+          <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+          <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+          <p><strong>Message:</strong><br/>${escapeHtml(message).replace(/\n/g, '<br/>')}</p>
+        </div>
+      `,
+    });
+
+    if (result.error) {
+      return res.status(502).json({
+        ok: false,
+        error: 'Resend error',
+        detail: result.error?.message || result.error,
+      });
+    }
+
+    return res.status(200).json({ ok: true, id: result.data?.id || null, message: 'Sent successfully' });
   } catch (err) {
-    console.error("Contact API error:", err);
-    return res.status(500).json({ error: "Server error" });
+    const detail =
+      err?.response?.data?.message ||
+      err?.message ||
+      'Unknown server error';
+    return res.status(500).json({ ok: false, error: 'Failed to send', detail });
   }
-};
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
