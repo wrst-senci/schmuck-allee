@@ -73,7 +73,11 @@
 
     /* Sections */
     .section { padding: 80px 20px; }
-    .container { max-width: var(--maxw); margin: auto; }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 calc(60px + 20px); /* bar width + breathing room */
+    }
 
     /* Hero */
     .hero {
