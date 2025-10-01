@@ -23,12 +23,20 @@
     body {
       margin: 0;
       font-family: "Inter", "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
-      background:     /* horizontal beige bars */
+      background:
+    /* horizontal beige bars */
     linear-gradient(to right,
       #eed9c4 60px,                /* left bar */
       transparent 60px,
       transparent calc(100% - 60px),
       #eed9c4 calc(100% - 60px)    /* right bar */
+    ),
+    /* vertical gradient */
+    linear-gradient(180deg, var(--bg-soft), var(--bg));
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  /* remove background-attachment: fixed */
+
     ),
     /* vertical gradient */
     linear-gradient(180deg, var(--bg-soft), var(--bg));
