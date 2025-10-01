@@ -121,31 +121,14 @@
   <!-- Kontakt -->
   <section class="section">
     <h2>Kontakt</h2>
-    <form id="contact-form" method="POST" action="/api/contact">
-      <label for="name">Name</label><br>
-      <input type="text" id="name" name="name" required><br><br>
+ <form id="contact-form">
+  <input type="text" name="name" required>
+  <input type="email" name="email" required>
+  <textarea name="message" required></textarea>
+  <button type="submit">Absenden</button>
+  </form>
   
-      <label for="email">E-Mail</label><br>
-      <input type="email" id="email" name="email" required><br><br>
-  
-      <label for="message">Nachricht</label><br>
-      <textarea id="message" name="message" rows="5" required></textarea><br><br>
-  
-      <button type="submit">Absenden</button>
-    </form>
-  
-    <p id="form-status" style="margin-top:10px; color: var(--muted);"></p>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <img src="logo.png" alt="Schmuck Allee Logo">
-    <div>Schmuck Allee</div>
-    <div>--placeholder [Contact info / social links]--</div>
-    <small>&copy; 2025 Schmuck Allee</small>
-  </footer>
-
-
+  <p id="form-status"></p>
   
   <script>
     const form = document.getElementById('contact-form');
@@ -161,19 +144,34 @@
         message: form.message.value
       };
   
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
   
-      if (res.ok) {
-        status.textContent = "Danke! Wir haben deine Nachricht erhalten.";
-        form.reset();
-      } else {
-        status.textContent = "Fehler beim Senden. Bitte versuche es später erneut.";
+        const result = await res.json();
+        if (res.ok) {
+          status.textContent = "Danke! Nachricht gesendet.";
+          form.reset();
+        } else {
+          status.textContent = `Fehler: ${result.error || 'Unbekannter Fehler'}`;
+        }
+      } catch (err) {
+        status.textContent = "Netzwerkfehler. Bitte später erneut versuchen.";
+        console.error("Frontend error:", err);
       }
     });
   </script>
+
+  <!-- Footer -->
+  <footer>
+    <img src="logo.png" alt="Schmuck Allee Logo">
+    <div>Schmuck Allee</div>
+    <div>--placeholder [Contact info / social links]--</div>
+    <small>&copy; 2025 Schmuck Allee</small>
+  </footer>
+
 </body>
 </html>
