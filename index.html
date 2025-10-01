@@ -66,16 +66,22 @@
     .section { padding: 80px 20px; }
     .container { max-width: var(--maxw); margin: auto; }
 
-    /* Hero */
+     /* Hero */
     .hero {
       text-align: center;
-      background: linear-gradient(180deg, var(--bg-soft), var(--bg), (to right,
-      #eed9c4 60px,          /* left bar */
-      transparent 60px,
-      transparent calc(100% - 60px),
-      #eed9c4 calc(100% - 60px) /* right bar */);
+      background:
+        /* horizontal beige bars */
+        linear-gradient(to right,
+          #eed9c4 60px,                /* left bar */
+          transparent 60px,
+          transparent calc(100% - 60px),
+          #eed9c4 calc(100% - 60px)    /* right bar */
+        ),
+        /* your existing vertical gradient */
+        linear-gradient(180deg, var(--bg-soft), var(--bg));
       padding: 120px 20px 80px;
     }
+
     .hero h1 {
       font-size: clamp(2rem, 4vw, 3rem);
       margin-bottom: 12px;
