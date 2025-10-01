@@ -1,0 +1,11 @@
+{
+  "name": "schmuck-allee",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "vercel-build": "echo 'no build step'"
+  },
+  "dependencies": {
+    "resend": "^3.2.0"
+  }
+}
