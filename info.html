@@ -156,15 +156,19 @@
     <h2>Kontakt & Sozial</h2>
     <form id="contact-form" novalidate>
       <label for="name">
-        <span>Name</span>
+        <span>Name*</span>
         <input id="name" type="text" name="name" required autocomplete="name" />
       </label>
       <label for="email">
-        <span>Email</span>
+        <span>Email*</span>
         <input id="email" type="email" name="email" required autocomplete="email" />
       </label>
+      <label for="phone">
+        <span>Telefonnummer</span>
+        <input id="phone" type="text" name="phone" required autocomplete="tel" />
+      </label>
       <label for="message">
-        <span>Nachricht</span>
+        <span>Nachricht*</span>
         <textarea id="message" name="message" required rows="5"></textarea>
       </label>
       <button type="submit">Senden</button>
@@ -183,11 +187,12 @@
       const payload = {
         name: formData.get('name')?.trim(),
         email: formData.get('email')?.trim(),
+        phone: fromData.get('phone')?.trim(),
         message: formData.get('message')?.trim(),
       };
 
       if (!payload.name || !payload.email || !payload.message) {
-        return setStatus('Bitte alle Felder ausfüllen.', 'error');
+        return setStatus('Bitte alle Pflichtfelder ausfüllen.', 'error');
       }
 
       try {
