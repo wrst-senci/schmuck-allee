@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, email, message } = req.body || {};
+    const { name, email, phone, message } = req.body || {};
 
     if (!name || !email || !message) {
       return res.status(400).json({
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const from = process.env.CONTACT_FROM; // e.g., "Contact <contact@yourdomain.com>"
+    const from = process.env.CONTACT_FROM;
     const to = process.env.CONTACT_TO;     // your private inbox/server-side only
     if (!from || !to) {
       return res.status(500).json({
@@ -40,7 +40,8 @@ export default async function handler(req, res) {
         <div style="font-family:system-ui,sans-serif;line-height:1.5">
           <p><strong>Name:</strong> ${escapeHtml(name)}</p>
           <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-          <p><strong>Message:</strong><br/>${escapeHtml(message).replace(/\n/g, '<br/>')}</p>
+          <p><strong>Telefon:</strong> ${escapeHtml(phone)}</p>
+          <p><strong>Nachricht:</strong><br/>${escapeHtml(message).replace(/\n/g, '<br/>')}</p>
         </div>
       `,
     });
