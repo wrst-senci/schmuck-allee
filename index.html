@@ -27,10 +27,10 @@
       background:
         /* horizontal beige bars */
         linear-gradient(to right,
-          #eed9c4 60px,                /* left bar */
+          #c19a6b 60px,                /* left bar */
           transparent 60px,
           transparent calc(100% - 60px),
-          #eed9c4 calc(100% - 60px)    /* right bar */
+          #c19a6b calc(100% - 60px)    /* right bar */
         ),
         /* vertical gradient */
         linear-gradient(180deg, var(--bg-soft), var(--bg));
@@ -137,8 +137,9 @@
     
     .gallery {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: var(--gap);
+      justify-content: center;
     }
     .gallery img {
       height: 260px; object-fit: cover;
@@ -248,7 +249,7 @@
   <nav>
     <a href="index.html"><img src="logo.png" alt="Schmuck Allee Logo"></a>
     <div class="dropdown">
-      <button class="dropbtn">Menu ▾</button>
+      <button class="dropbtn">Menü ▾</button>
       <div class="dropdown-content">
         <a href="info.html">Infos</a>
       </div>
