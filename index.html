@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Schmuck Allee</title>
   <link rel="icon" href="favicon.png" type="image/png">
+  <!-- NEU: Lade die Allura Schriftart von Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #ffffff;
@@ -23,6 +25,7 @@
     
     body {
       margin: 0;
+      /* "Inter" bleibt die Hauptschriftart */
       font-family: "Inter", "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
       background:
         /* horizontal beige bars */
@@ -103,16 +106,23 @@
       padding: 120px 20px 80px;
     }
 
+    /* NEU: Styling für die große Überschrift */
     .hero h1 {
-      font-size: clamp(2rem, 4vw, 3rem);
+      font-family: 'Allura', cursive; /* Allura Schriftart */
+      font-size: clamp(3rem, 6vw, 5rem); /* Skaliert größer */
       margin-bottom: 12px;
       color: var(--accent);
+      font-weight: 400; /* Allura sieht besser aus mit Standardgewicht */
+      line-height: 1;
     }
+    /* NEU: Styling für den Slogan */
     .hero p {
-      font-size: 1.2rem;
+      font-family: 'Allura', cursive; /* Allura Schriftart */
+      font-size: clamp(1.8rem, 3vw, 2.5rem); /* Skaliert größer */
       color: var(--muted);
       margin-bottom: 40px;
     }
+    
     .hero img {
       width: min(800px, 90%);
       border-radius: var(--radius);
@@ -131,7 +141,11 @@
     .feature.reverse { grid-template-columns: 1fr 1fr; direction: rtl; }
     .feature.reverse .feature-content { direction: ltr; }
     .feature img { border-radius: var(--radius); box-shadow: var(--shadow); }
-    .feature-content h2 { margin-bottom: 16px; font-size: 1.6rem; }
+    .feature-content h2 { 
+        margin-bottom: 16px; 
+        font-size: 1.6rem; 
+        font-family: "Inter", sans-serif; /* Behält die klare, standardmäßige Schriftart */
+    }
     .feature-content ul { list-style: none; padding: 0; margin: 0; }
     .feature-content li { margin-bottom: 10px; font-weight: 500; }
 
@@ -266,7 +280,7 @@
     <div class="dropdown">
       <button class="dropbtn">Menü ▾</button>
       <div class="dropdown-content">
-        <!-- Aktive Seite "Start" nicht anzeigen, daher active Klasse. -->
+        <!-- Aktive Seite "Start" nicht anzeigen -->
         <a href="kontakt.html">Kontakt</a>
         <a href="info.html">Info</a>
       </div>
