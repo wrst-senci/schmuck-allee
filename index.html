@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Schmuck Allee</title
+  <title>Schmuck Allee</title>
   <link rel="icon" href="favicon.png" type="image/png">
   <style>
     :root {
@@ -84,6 +84,8 @@
       display: block; padding: 12px 16px;
       color: var(--text); text-decoration: none;
     }
+    /* Aktive Seite nicht anzeigen */
+    .dropdown-content a.active { display: none; }
     .dropdown-content a:hover { background: var(--bg-soft); }
     .dropdown:hover .dropdown-content { display: block; }
 
@@ -264,7 +266,9 @@
     <div class="dropdown">
       <button class="dropbtn">Menü ▾</button>
       <div class="dropdown-content">
-        <a href="info.html">Infos</a>
+        <!-- Aktive Seite "Start" nicht anzeigen, daher active Klasse. -->
+        <a href="kontakt.html">Kontakt</a>
+        <a href="info.html">Info</a>
       </div>
     </div>
   </nav>
