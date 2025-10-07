@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Infos - Schmuck Allee</title>
+  <title>Informationen - Schmuck Allee</title>
   <link rel="icon" href="favicon.png" type="image/png">
   <style>
     :root {
@@ -15,16 +15,42 @@
       --divider: #e6e2da;
       --radius: 12px;
       --shadow: 0 8px 24px rgba(0,0,0,0.06);
-      --maxw: 900px;
+      --maxw: 1200px;
+      --gap: 24px;
     }
 
+    * { box-sizing: border-box; }
+    
     body {
       margin: 0;
       font-family: "Inter", "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
-      background: var(--bg);
       color: var(--text);
       line-height: 1.6;
+      /* Styling vom Index für den Hintergrund übernommen */
+      background:
+        /* horizontal beige bars */
+        linear-gradient(to right,
+          #c19a6b 60px,                /* left bar */
+          transparent 60px,
+          transparent calc(100% - 60px),
+          #c19a6b calc(100% - 60px)    /* right bar */
+        ),
+        /* vertical gradient */
+        linear-gradient(180deg, var(--bg-soft), var(--bg));
+      background-repeat: no-repeat;
+      background-attachment: scroll;
+      min-height: 100vh; /* Sorgt dafür, dass der Footer am Ende ist */
+      display: flex;
+      flex-direction: column;
     }
+
+    /*mobile adjustment*/
+    @media (max-width: 768px) {
+      body {
+        background: linear-gradient(180deg, var(--bg-soft), var(--bg));
+      }
+    }
+        
     img { max-width: 100%; display: block; }
 
     /* Navbar */
@@ -54,72 +80,65 @@
     .dropdown-content a {
       display: block; padding: 12px 16px;
       color: var(--text); text-decoration: none;
+      /* Hervorhebung des aktiven Links (nur zur Info, da wir keine Server-Side-Logik haben) */
+      /* filter: grayscale(1); */ 
     }
+    /* Aktive Seite nicht anzeigen */
+    .dropdown-content a.active { display: none; }
     .dropdown-content a:hover { background: var(--bg-soft); }
     .dropdown:hover .dropdown-content { display: block; }
 
-    /* Page content */
+    /* Page content styling */
+    .main-content {
+        flex-grow: 1;
+        padding-bottom: 80px;
+    }
+
     .section {
-      max-width: var(--maxw);
-      margin: 60px auto;
+      max-width: 900px;
+      margin: 80px auto 0;
       padding: 0 20px;
     }
-    .section h1, .section h2 {
+    
+    .info-card {
+        background: var(--bg);
+        border: 1px solid var(--divider);
+        border-radius: var(--radius);
+        padding: 40px;
+        box-shadow: var(--shadow);
+    }
+
+    .section h1 {
       color: var(--accent);
-      margin-bottom: 16px;
-    }
-    .section p {
-      margin-bottom: 20px;
-      color: var(--text);
-    }
-    .divider {
-      height: 1px;
-      background: var(--divider);
-      margin: 60px auto;
-      max-width: var(--maxw);
-    }
-
-    /* Contact form */
-    form label {
-      display: block;
-      margin-bottom: 1rem;
-    }
-    form span {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 0.6rem 0.8rem;
-      border: 1px solid var(--divider);
-      border-radius: var(--radius);
-      font: inherit;
-    }
-    button {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 0.7rem 1.2rem;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-weight: 600;
-    }
-    button:hover { opacity: 0.9; }
-
-    .status { margin-top: 0.75rem; font-size: 0.95rem; }
-    .status.info { color: #6b7280; }
-    .status.success { color: #0ea5e9; }
-    .status.error { color: #dc2626; }
-
-    /* Footer */
-    footer {
+      margin-bottom: 30px;
       text-align: center;
-      padding: 40px 20px;
-      border-top: 1px solid var(--divider);
-      color: var(--muted);
+      font-size: 2.5rem;
     }
-    footer img { max-height: 30px; margin-bottom: 10px; }
+
+    .info-card h2 {
+        font-size: 1.5rem;
+        color: var(--text);
+        margin-top: 30px;
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 5px;
+    }
+
+    .info-card p {
+        margin-bottom: 20px;
+        color: var(--muted);
+    }
+
+    /* Footer styling von index (1).html */
+    .site-footer {
+      background: #f8f8f8;
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+      border-top: 1px solid #e0e0e0;
+      margin-top: auto; /* Sorgt dafür, dass der Footer unten bleibt */
+    }
+
   </style>
 </head>
 <body>
@@ -128,112 +147,53 @@
   <nav>
     <a href="index.html"><img src="logo.png" alt="Schmuck Allee Logo"></a>
     <div class="dropdown">
-      <button class="dropbtn">Menu ▾</button>
+      <button class="dropbtn">Menü ▾</button>
       <div class="dropdown-content">
-        <a href="index.html">Home</a>
+        <!-- Aktuelle Seite "Info" nicht anzeigen, daher active Klasse. -->
+        <a href="index.html">Start</a>
+        <a href="kontakt.html">Kontakt</a>
       </div>
     </div>
   </nav>
 
-  <!-- Über -->
-  <section class="section">
-    <h1>Über Schmuck Allee</h1>
-    <p>Wir sind eine Junior Company aus dem TGM, Abteilung Wirtschaftsingenieurwesen Logistik. Unser Ziel ist es, ein perfektes Ausstellungsstück für Schmuckliebhaber wie uns zu schaffen.</p>
-  </section>
+  <!-- Info Sektion -->
+  <div class="main-content">
+    <section class="section">
+      <div class="info-card">
+          <h1>Über Schmuck Allee</h1>
+          <p style="text-align:center; margin-bottom: 40px; color: var(--text); font-style: italic;">Hier finden Sie alle Informationen über unsere Mission, die Herstellung und unsere Werte.</p>
 
-  <div class="divider"></div>
+          <h2>Unsere Mission</h2>
+          <p>
+            Wir glauben daran, dass jedes Schmuckstück eine Geschichte erzählen sollte. Unsere Mission ist es, handgefertigte Stücke zu kreieren, die nicht nur schön sind, sondern auch eine tiefe, persönliche Bedeutung haben. Wir legen Wert auf Langlebigkeit und zeitloses Design, damit Sie unsere Kreationen ein Leben lang begleiten.
+          </p>
 
-  <!-- Details -->
-  <section class="section">
-    <h2>Unser Handwerk</h2>
-    <p>Jeder Schmuckbaum wird von Hand hergestellt.</p>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- Kontakt -->
-  <section class="section">
-    <h2>Kontakt & Sozial</h2>
-    <form id="contact-form" novalidate>
-      <label for="name">
-        <span>Name*</span>
-        <input id="name" type="text" name="name" required autocomplete="name" />
-      </label>
-      <label for="email">
-        <span>Email*</span>
-        <input id="email" type="email" name="email" required autocomplete="email" />
-      </label>
-      <label for="phone">
-        <span>Telefonnummer</span>
-        <input id="phone" type="text" name="phone" required autocomplete="tel" />
-      </label>
-      <label for="message">
-        <span>Nachricht*</span>
-        <textarea id="message" name="message" required rows="5"></textarea>
-      </label>
-      <button type="submit">Senden</button>
-      <p id="form-status" aria-live="polite" class="status"></p>
-    </form>
-  </section>
-
-  <script>
-    const form = document.getElementById('contact-form');
-    const statusEl = document.getElementById('form-status');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(form);
-      const payload = {
-        name: formData.get('name')?.trim(),
-        email: formData.get('email')?.trim(),
-        phone: formData.get('phone')?.trim(),
-        message: formData.get('message')?.trim(),
-      };
-
-      if (!payload.name || !payload.email || !payload.message) {
-        return setStatus('Bitte alle Pflichtfelder ausfüllen.', 'error');
-      }
-
-      try {
-        setStatus('Sende…', 'info');
-
-        const res = await fetch('/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-
-        const json = await res.json().catch(() => ({}));
-
-        if (!res.ok || !json.ok) {
-          const msg =
-            json?.detail ||
-            json?.error ||
-            `Fehler (${res.status} ${res.statusText})`;
-          throw new Error(msg);
-        }
-
-        setStatus('Danke! Deine Nachricht wurde gesendet.', 'success');
-        form.reset();
-      } catch (err) {
-        console.error('Contact form error:', err);
-        setStatus(`Fehler: ${err.message}`, 'error');
-      }
-    });
-
-    function setStatus(text, type) {
-      statusEl.textContent = text;
-      statusEl.className = `status ${type}`;
-    }
-  </script>
+          <h2>Handwerk & Materialien</h2>
+          <p>
+            Jedes Stück wird mit größter Sorgfalt und Liebe zum Detail in unserer Werkstätte gefertigt. Wir verwenden nur ausgewählte, hochwertige Materialien wie Pappelholz und andere nachhaltige Ressourcen. Unsere Produktionsprozesse sind darauf ausgelegt, Abfall zu minimieren und die Umwelt zu schonen. Dies garantiert die hohe Qualität und Einzigartigkeit jedes Schmuckträgers.
+          </p>
+          
+          <h2>Die Köpfe dahinter</h2>
+          <p>
+            Schmuck Allee ist ein Projekt, das aus der Leidenschaft für Handwerk und Design in der TGM Werkstätte entstanden ist. Wir sind ein kleines Team von Enthusiasten, die es lieben, Ideen in wunderschöne, funktionale Produkte umzusetzen.
+          </p>
+      </div>
+    </section>
+  </div>
 
   <!-- Footer -->
-  <footer>
-    <img src="logo.png" alt="Schmuck Allee Logo">
-    <div>Schmuck Allee</div>
-    <div>--placeholder [Kontaktinfo / Social Links]--</div>
-    <small>&copy; 2025 Schmuck Allee</small>
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>&copy; 2025 Schmuck Allee · Weil jedes Stück zählt</p>
+      <p>
+        Impressum<br>
+        Schmuck Allee<br>
+        Musterstraße 1<br>
+        1010 Wien<br>
+        Österreich<br>
+        E-Mail: kontakt@schmuckallee.at
+      </p>
+    </div>
   </footer>
 
 </body>
