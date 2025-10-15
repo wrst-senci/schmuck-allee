@@ -53,46 +53,17 @@
         
     img { max-width: 100%; display: block; }
 
-    /* Navbar */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      background: #fff;
-      border-bottom: 1px solid var(--divider);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    nav img { max-height: 40px; }
-    .dropdown { position: relative; display: inline-block; }
-    .dropbtn {
-      background: none; border: none;
-      font-size: 1rem; cursor: pointer;
-      font-weight: 600; color: var(--text);
-    }
-    .dropdown-content {
-      display: none; position: absolute; right: 0;
-      background: #fff; min-width: 160px;
-      box-shadow: var(--shadow);
-    }
-    .dropdown-content a {
-      display: block; padding: 12px 16px;
-      color: var(--text); text-decoration: none;
-    }
-    .dropdown-content a:hover { background: var(--bg-soft); }
-    .dropdown:hover .dropdown-content { display: block; }
-
     /* Page content styling */
     .main-content {
         flex-grow: 1;
         padding-bottom: 80px;
+        /* Etwas Platz oben hinzugefügt, da die Navbar weg ist */
+        padding-top: 80px; 
     }
 
     .section {
       max-width: 900px;
-      margin: 80px auto 0;
+      margin: 0 auto; /* Angepasst, da die Sektion jetzt das erste Element ist */
       padding: 0 20px;
     }
     
@@ -143,18 +114,6 @@
   </style>
 </head>
 <body>
-
-  <nav>
-    <a href="index.html"><img src="logo.png" alt="Schmuck Allee Logo"></a>
-    <div class="dropdown">
-      <button class="dropbtn">Menü ▾</button>
-      <div class="dropdown-content">
-        <a href="index.html">Start</a>
-        <a href="info.html">Info</a>
-        <a href="kontakt.html">Kontakt</a>
-      </div>
-    </div>
-  </nav>
 
   <div class="main-content">
     <section class="section">
