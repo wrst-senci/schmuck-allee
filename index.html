@@ -128,12 +128,17 @@
     .hero-caption {
       font-family: "Inter", sans-serif;
       font-size: 0.8rem;
-      color: #a0a0a0; /* NEU: Hellerer Grauton (oder verwenden Sie var(--muted) für den Standardton) */
-      text-align: left; /* NEU: Links ausgerichtet */
+      color: #a0a0a0; 
+      text-align: left;
       margin-top: 20px; 
-      max-width: 600px; 
-      margin-left: 0; /* NEU: Links ausgerichtet */
-      margin-right: auto; /* NEU: Sorgt dafür, dass der Textcontainer nach links rutscht */
+      
+      /* NEU: WICHTIG - Gleiche Breite wie das Bild, um die Zentrierung zu erhalten */
+      width: min(800px, 90%); 
+      max-width: 800px; /* Stellt sicher, dass es auf großen Bildschirmen passt */
+      
+      /* NEU: Zentriert den gesamten Textblock unter dem zentrierten Bild */
+      margin-left: auto;
+      margin-right: auto;
     }
     
     .hero img {
