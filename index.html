@@ -118,21 +118,22 @@
     }
     
   /* NEU: Styling für den Slogan */
-  .hero .slogan {
-    font-family: 'Allura', cursive; /* Allura Schriftart */
-    font-size: clamp(1.8rem, 3vw, 2.5rem); /* Skaliert größer */
-    color: var(--muted);
-    margin-bottom: 40px;
-  }
+    .hero .slogan {
+      font-family: 'Allura', cursive; /* Allura Schriftart */
+      font-size: clamp(1.8rem, 3vw, 2.5rem); /* Skaliert größer */
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
 
     .hero-caption {
-      font-family: "Inter", sans-serif; /* Normale Schriftart */
-      font-size: 0.8rem;  /* NEU: Kleiner gemacht */
-      color: var(--muted);
-      margin-top: 20px; /* Abstand zum Bild */
-      max-width: 600px; /* Bessere Lesbarkeit */
-      margin-left: auto;
-      margin-right: auto;
+      font-family: "Inter", sans-serif;
+      font-size: 0.8rem;
+      color: #a0a0a0; /* NEU: Hellerer Grauton (oder verwenden Sie var(--muted) für den Standardton) */
+      text-align: left; /* NEU: Links ausgerichtet */
+      margin-top: 20px; 
+      max-width: 600px; 
+      margin-left: 0; /* NEU: Links ausgerichtet */
+      margin-right: auto; /* NEU: Sorgt dafür, dass der Textcontainer nach links rutscht */
     }
     
     .hero img {
