@@ -116,13 +116,14 @@
       font-weight: 400; /* Allura sieht besser aus mit Standardgewicht */
       line-height: 1;
     }
-    /* NEU: Styling für den Slogan */
-    .hero p {
-      font-family: 'Allura', cursive; /* Allura Schriftart */
-      font-size: clamp(1.8rem, 3vw, 2.5rem); /* Skaliert größer */
-      color: var(--muted);
-      margin-bottom: 40px;
-    }
+    
+  /* NEU: Styling für den Slogan */
+  .hero .slogan {
+    font-family: 'Allura', cursive; /* Allura Schriftart */
+    font-size: clamp(1.8rem, 3vw, 2.5rem); /* Skaliert größer */
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
 
     .hero-caption {
       font-family: "Inter", sans-serif; /* Normale Schriftart */
@@ -301,7 +302,7 @@
   <!-- Hero -->
   <section class="hero fade-in">
     <h1>Schmuck Allee</h1>
-    <p>Weil jedes Stück zählt</p>
+    <p class="slogan">Weil jedes Stück zählt</p>
     <img src="product1.png" alt="Main product image">
     <p class="hero-caption">
       Alle bilder sind von unserem Prototypen, sie zeigen nicht wie das Endprodukt ausschaut. Bilder gemacht von Killian Fuchs
