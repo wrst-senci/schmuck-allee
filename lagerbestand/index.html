@@ -210,6 +210,18 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* New Warning Style for Mock Data */
+        .mock-warning {
+            background-color: #FFFBEA; /* Light Yellow */
+            border: 1px solid #FBC02D; /* Darker Yellow */
+            color: #A07A4A; /* Accent color */
+            padding: 15px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -236,6 +248,11 @@
             <p class="page-subtitle">
                 Hier sehen Sie in Echtzeit unseren Lagerbestand der verschiedenen Holzarten für Ihren Schmuckhalter.
             </p>
+        </div>
+        
+        <!-- NEW: Mock Data Warning Indicator -->
+        <div id="mock-data-warning" class="mock-warning hidden">
+            ⚠️ **DEMO-MODUS:** Es werden Beispiel-Daten angezeigt. Bitte ersetzen Sie "YOUR_GOOGLE_SHEET_PUBLISHED_CSV_URL_HERE" durch Ihre veröffentlichte Google Sheet URL, um Live-Daten zu sehen.
         </div>
 
         <!-- Loading Indicator -->
@@ -275,6 +292,7 @@
         // --- 1. CONFIGURATION ---
         // WICHTIG: Ersetzen Sie diese MOCK_CSV_URL durch die tatsächliche veröffentlichte URL des Google Sheets.
         const LIVE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvFzppFKuZonWFx_I3nlNp96qlKZWrHZGwwNUmdYTZwhDFRFIl35fJFOuabX6NE0INCfKNNY2oKKeQ/pub?gid=539303511&single=true&output=csv";
+        const PLACEHOLDER_URL = "YOUR_GOOGLE_SHEET_PUBLISHED_CSV_URL_HERE";
 
         // MOCK CSV DATA (Vier verschiedene Holzarten)
         const MOCK_CSV_DATA = `SKU,VariantName,Stock,ImagePlaceholder,FlavorText
@@ -286,6 +304,7 @@ HOLDER-BEECH,Buchenholz Basis,22,https://placehold.co/400x300/f7f4ef/2b2b2b?text
         const inventoryGrid = document.getElementById('inventory-grid');
         const loadingIndicator = document.getElementById('loading-indicator');
         const errorMessage = document.getElementById('error-message');
+        const mockDataWarning = document.getElementById('mock-data-warning');
 
         /**
          * Parses CSV text into an array of product objects.
@@ -302,7 +321,8 @@ HOLDER-BEECH,Buchenholz Basis,22,https://placehold.co/400x300/f7f4ef/2b2b2b?text
                 const values = line.split(',');
                 const item = {};
                 headers.forEach((header, i) => {
-                    item[header] = values[i] ? values[i].trim() : '';
+                    // Check if value exists before trimming (to handle empty cells at the end)
+                    item[header] = values[i] ? values[i].trim() : ''; 
                 });
                 return item;
             });
@@ -342,7 +362,7 @@ HOLDER-BEECH,Buchenholz Basis,22,https://placehold.co/400x300/f7f4ef/2b2b2b?text
 
                 // Create the HTML card element
                 const productCard = document.createElement('div');
-                productCard.className = 'wood-product-card fade-in visible'; // Added visible class for immediate rendering
+                productCard.className = 'wood-product-card fade-in visible';
                 
                 // Card content using the new CSS style
                 productCard.innerHTML = `
@@ -379,24 +399,35 @@ HOLDER-BEECH,Buchenholz Basis,22,https://placehold.co/400x300/f7f4ef/2b2b2b?text
         async function fetchInventory(retries = 3) {
             loadingIndicator.classList.remove('hidden');
             errorMessage.classList.add('hidden');
+            mockDataWarning.classList.add('hidden');
             
-            const sourceUrl = LIVE_CSV_URL && LIVE_CSV_URL !== "YOUR_GOOGLE_SHEET_PUBLISHED_CSV_URL_HERE" ? LIVE_CSV_URL : null;
-            let csvText = MOCK_CSV_DATA;
+            const isPlaceholder = LIVE_CSV_URL === PLACEHOLDER_URL;
+            let csvText = '';
 
+            if (isPlaceholder) {
+                // If the URL is still the placeholder, use MOCK data and show warning
+                csvText = MOCK_CSV_DATA;
+                mockDataWarning.classList.remove('hidden');
+                console.warn("MOCK-Daten werden verwendet. Bitte aktualisieren Sie die LIVE_CSV_URL.");
+                
+                const products = parseCSV(csvText);
+                renderInventory(products);
+                loadingIndicator.classList.add('hidden');
+                return;
+            }
+
+            // --- Attempt to fetch live data ---
             for (let i = 0; i < retries; i++) {
                 try {
-                    if (sourceUrl) {
-                        const response = await fetch(sourceUrl, { cache: "no-store" });
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        csvText = await response.text();
-                    } else {
-                        console.warn("MOCK-Daten werden verwendet. Bitte aktualisieren Sie die LIVE_CSV_URL.");
+                    const response = await fetch(LIVE_CSV_URL, { cache: "no-store" });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
+                    csvText = await response.text();
 
                     const products = parseCSV(csvText);
                     renderInventory(products);
+                    loadingIndicator.classList.add('hidden');
                     return; // Success, exit function
                 } catch (error) {
                     console.error(`Fehler beim Abrufen (Versuch ${i + 1}/${retries}):`, error);
@@ -407,7 +438,8 @@ HOLDER-BEECH,Buchenholz Basis,22,https://placehold.co/400x300/f7f4ef/2b2b2b?text
                 }
             }
             
-            // If all retries fail
+            // If all retries fail on live URL
+            loadingIndicator.classList.add('hidden');
             errorMessage.classList.remove('hidden');
             inventoryGrid.innerHTML = '';
             console.error("Alle Versuche zum Abrufen der Inventardaten sind fehlgeschlagen.");
@@ -441,6 +473,7 @@ HOLDER-BEECH,Buchenholz Basis,22,https://placehold.co/400x300/f7f4ef/2b2b2b?text
             }, appearOptions);
             
             faders.forEach(fader => {
+                // Only observe elements that aren't immediately visible (like the main title block)
                 if (!fader.classList.contains('visible')) {
                     appearOnScroll.observe(fader);
                 }
