@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schmuck Allee | Lagerbestand</title>
+    <!-- Lade die Allura Schriftart (für Titel) und Inter (für Haupttext) -->
+    <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* BASE STYLES from index (4).html */
+        :root {
+            --bg: #ffffff;
+            --bg-soft: #f7f4ef;
+            --text: #2b2b2b;
+            --muted: #6f6f6f;
+            --accent: #c9a24a; /* Primary Gold/Accent Color */
+            --divider: #e6e2da;
+            --radius: 12px;
+            --shadow: 0 8px 24px rgba(0,0,0,0.06);
+            --maxw: 1200px;
+            --gap: 24px;
+        }
+
+        * { box-sizing: border-box; }
+        
+        body {
+            margin: 0;
+            font-family: "Inter", sans-serif;
+            color: var(--text);
+            background:
+                /* horizontal beige bars */
+                linear-gradient(to right,
+                    #c19a6b 60px,
+                    transparent 60px,
+                    transparent calc(100% - 60px),
+                    #c19a6b calc(100% - 60px)
+                ),
+                /* vertical gradient */
+                linear-gradient(180deg, var(--bg-soft), var(--bg));
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            min-height: 100vh;
+        }
+
+        /* mobile adjustment */
+        @media (max-width: 768px) {
+            body {
+                background: linear-gradient(180deg, var(--bg-soft), var(--bg));
+            }
+        
+            .container {
+                padding: 0 20px;
+            }
+        }
+
+        /* Navbar (from index.html) */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: #fff;
+            border-bottom: 1px solid var(--divider);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav img { max-height: 40px; }
+        .dropdown { position: relative; display: inline-block; }
+        .dropbtn {
+            background: none; border: none;
+            font-size: 1rem; cursor: pointer;
+            font-weight: 600; color: var(--text);
+        }
+        .dropdown-content {
+            display: none; position: absolute; right: 0;
+            background: #fff; min-width: 160px;
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .dropdown-content a {
+            display: block; padding: 12px 16px;
+            color: var(--text); text-decoration: none;
+        }
+        .dropdown-content a.active { 
+            background: var(--bg-soft); 
+            font-weight: 700;
+            color: var(--accent);
+            pointer-events: none; /* Make active link non-clickable */
+        }
+        .dropdown-content a:hover { background: var(--bg-soft); }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        /* Main Container */
+        .container {
+            max-width: var(--maxw);
+            margin: 0 auto;
+            padding: 0 calc(60px + 20px); /* bar width + breathing room */
+        }
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+        }
+
+        /* Titles and Text */
+        .page-title {
+            font-family: 'Allura', cursive;
+            font-size: clamp(3rem, 7vw, 5rem); 
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+            font-weight: 400; 
+            text-align: center;
+            line-height: 1;
+        }
+        .page-subtitle {
+            font-family: "Inter", sans-serif;
+            font-size: 1.1rem;
+            color: var(--muted);
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 0 10px;
+        }
+        
+        /* Product Card Styling */
+        .wood-product-card {
+            background-color: var(--bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--divider);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .wood-product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Image Container */
+        .card-image-container {
+            height: 250px;
+            overflow: hidden;
+            background-color: var(--bg-soft);
+        }
+        .card-image {
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .wood-product-card:hover .card-image {
+            transform: scale(1.05);
+        }
+        
+        /* Stock Indicators (using high contrast for clarity) */
+        .stock-indicator {
+            padding: 8px 12px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid transparent;
+        }
+        .stock-indicator-low {
+            background-color: #FEE2E2; /* Light Red */
+            color: #EF4444; /* Red */
+            border-color: #FCA5A5;
+        }
+        .stock-indicator-in {
+            background-color: #D1FAE5; /* Light Green */
+            color: #10B981; /* Green */
+            border-color: #A7F3D0;
+        }
+        .stock-indicator-out {
+            background-color: #F3F4F6; /* Light Gray */
+            color: var(--muted); 
+            border-color: #D1D5DB;
+        }
+        
+        /* Flavor Text Area */
+        .flavor-text {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: var(--bg-soft);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--muted);
+            border: 1px solid var(--divider);
+        }
+        
+        /* Footer (from index.html) */
+        .site-footer {
+            background: #f8f8f8;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #555;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        /* Fade-in for smooth loading */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar (Style copied from index (4).html) -->
+    <nav>
+        <!-- Assuming you have a logo.png file -->
+        <a href="/"><img src="logo.png" alt="Schmuck Allee Logo"></a>
+        <div class="dropdown">
+            <button class="dropbtn">Menü ▾</button>
+            <div class="dropdown-content">
+                <a href="index.html">Start</a>
+                <a href="#" class="active">Lagerbestand</a> <!-- Marked as active -->
+                <a href="/kontakt/">Kontakt</a>
+                <a href="/infos/">Infos</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="container py-12">
+        <div class="fade-in">
+            <h1 class="page-title">Holzbasen im Überblick</h1>
+            <p class="page-subtitle">
+                Hier sehen Sie in Echtzeit unseren Lagerbestand der verschiedenen Holzarten für Ihren Schmuckhalter.
+            </p>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="text-center py-20 text-gray-500 text-xl fade-in visible">
+            Echtzeit-Inventardaten werden abgerufen...
+        </div>
+        
+        <!-- Inventory Grid Container -->
+        <div id="inventory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-8">
+            <!-- Product variant cards will be injected here by JavaScript -->
+        </div>
+
+        <!-- Error Message Placeholder -->
+        <div id="error-message" class="hidden text-center py-10" 
+            style="background-color: #FEE2E2; border: 1px solid #FCA5A5; color: #EF4444; border-radius: var(--radius); margin-top: 40px;">
+            <p class="font-bold">Fehler beim Laden der Lagerdaten.</p>
+            <p>Bitte stellen Sie sicher, dass die Google Sheet URL korrekt und als CSV veröffentlicht ist.</p>
+        </div>
+    </main>
+
+    <!-- Footer (Style copied from index (4).html) -->
+    <footer class="site-footer">
+        <div class="footer-content fade-in visible">
+            <p>&copy; 2025 Schmuck Allee · Weil jedes Stück zählt</p>
+            <p>
+                Impressum<br>
+                Schmuck Allee<br>
+                Wexstraße 19/23<br>
+                1200 Wien<br>
+                Österreich<br>
+                E-Mail: schmuck.allee@gmail.com
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. CONFIGURATION ---
+        // WICHTIG: Ersetzen Sie diese MOCK_CSV_URL durch die tatsächliche veröffentlichte URL des Google Sheets.
+        const LIVE_CSV_URL = "YOUR_GOOGLE_SHEET_PUBLISHED_CSV_URL_HERE";
+
+        // MOCK CSV DATA (Vier verschiedene Holzarten)
+        const MOCK_CSV_DATA = `SKU,VariantName,Stock,ImagePlaceholder,FlavorText
+HOLDER-OAK,Eichenholz Basis,15,https://placehold.co/400x300/a0a0a0/2b2b2b?text=Eiche+Basis,Die Eiche steht für Stärke und verleiht jedem Halter eine warme, robuste Ausstrahlung.
+HOLDER-MAPLE,Ahornholz Basis,3,https://placehold.co/400x300/c9a24a/2b2b2b?text=Ahorn+Basis,Helles Ahornholz bringt eine moderne, saubere Ästhetik in jeden Raum. Perfekt für minimalistische Looks.
+HOLDER-WALNUT,Nussbaumholz Basis,0,https://placehold.co/400x300/6f6f6f/ffffff?text=Nussbaum+Basis,Das dunkle, reiche Finish des Nussbaums bietet einen luxuriösen Kontrast zu hellem Schmuck.
+HOLDER-BEECH,Buchenholz Basis,22,https://placehold.co/400x300/f7f4ef/2b2b2b?text=Buche+Basis,Buchenholz ist vielseitig und langlebig, eine helle und neutrale Wahl.`;
+
+        const inventoryGrid = document.getElementById('inventory-grid');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const errorMessage = document.getElementById('error-message');
+
+        /**
+         * Parses CSV text into an array of product objects.
+         * Now expects SKU, VariantName, Stock, ImagePlaceholder, and FlavorText.
+         * @param {string} csvText - The CSV data as a string.
+         * @returns {Array<Object>} - Array of product objects.
+         */
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            if (lines.length < 2) return [];
+
+            const headers = lines[0].split(',').map(h => h.trim());
+            const data = lines.slice(1).map(line => {
+                const values = line.split(',');
+                const item = {};
+                headers.forEach((header, i) => {
+                    item[header] = values[i] ? values[i].trim() : '';
+                });
+                return item;
+            });
+            return data;
+        }
+
+        /**
+         * Renders the inventory data dynamically into the grid with the new styling.
+         * @param {Array<Object>} products - Array of product objects.
+         */
+        function renderInventory(products) {
+            inventoryGrid.innerHTML = ''; // Clear previous content
+
+            if (products.length === 0) {
+                inventoryGrid.innerHTML = '<p class="col-span-full text-center text-gray-500">Keine Produktvarianten im Inventar gefunden.</p>';
+                return;
+            }
+
+            products.forEach(product => {
+                const stock = parseInt(product.Stock, 10);
+                const isOutOfStock = stock <= 0;
+                const isLowStock = stock > 0 && stock <= 5;
+
+                let stockText = '';
+                let stockClass = '';
+
+                if (isOutOfStock) {
+                    stockText = 'NICHT LAGERND';
+                    stockClass = 'stock-indicator-out';
+                } else if (isLowStock) {
+                    stockText = `GERINGER BESTAND (${stock} Stück)`;
+                    stockClass = 'stock-indicator-low';
+                } else {
+                    stockText = `AUF LAGER (${stock} Stück)`;
+                    stockClass = 'stock-indicator-in';
+                }
+
+                // Create the HTML card element
+                const productCard = document.createElement('div');
+                productCard.className = 'wood-product-card fade-in visible'; // Added visible class for immediate rendering
+                
+                // Card content using the new CSS style
+                productCard.innerHTML = `
+                    <div class="card-image-container">
+                        <img 
+                            src="${product.ImagePlaceholder}" 
+                            alt="${product.VariantName}" 
+                            class="card-image"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/d1d5db/6f6f6f?text=Bild+Fehlt';"
+                        >
+                    </div>
+                    <div style="padding: 20px;">
+                        <p style="font-size: 0.85rem; font-weight: 500; color: var(--muted); margin-bottom: 4px;">SKU: ${product.SKU}</p>
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text); margin-bottom: 0;">${product.VariantName}</h3>
+                        
+                        <!-- Flavor Text Area -->
+                        <div class="flavor-text">
+                            ${product.FlavorText || 'Eine wunderschöne Basis aus diesem erlesenen Holz. Perfekt, um Ihren Schmuck zu präsentieren.'}
+                        </div>
+                        
+                        <!-- Real-time Stock Indicator -->
+                        <div class="stock-indicator ${stockClass}">
+                            ${stockText}
+                        </div>
+                    </div>
+                `;
+                inventoryGrid.appendChild(productCard);
+            });
+        }
+
+        /**
+         * Main function to fetch and display the inventory (with exponential backoff for robustness).
+         */
+        async function fetchInventory(retries = 3) {
+            loadingIndicator.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+            
+            const sourceUrl = LIVE_CSV_URL && LIVE_CSV_URL !== "YOUR_GOOGLE_SHEET_PUBLISHED_CSV_URL_HERE" ? LIVE_CSV_URL : null;
+            let csvText = MOCK_CSV_DATA;
+
+            for (let i = 0; i < retries; i++) {
+                try {
+                    if (sourceUrl) {
+                        const response = await fetch(sourceUrl, { cache: "no-store" });
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        csvText = await response.text();
+                    } else {
+                        console.warn("MOCK-Daten werden verwendet. Bitte aktualisieren Sie die LIVE_CSV_URL.");
+                    }
+
+                    const products = parseCSV(csvText);
+                    renderInventory(products);
+                    return; // Success, exit function
+                } catch (error) {
+                    console.error(`Fehler beim Abrufen (Versuch ${i + 1}/${retries}):`, error);
+                    if (i < retries - 1) {
+                        const delay = Math.pow(2, i) * 1000; // Exponential backoff (1s, 2s, 4s)
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                    }
+                }
+            }
+            
+            // If all retries fail
+            errorMessage.classList.remove('hidden');
+            inventoryGrid.innerHTML = '';
+            console.error("Alle Versuche zum Abrufen der Inventardaten sind fehlgeschlagen.");
+            
+        }
+
+        // --- 2. INITIALIZATION & REAL-TIME REFRESH ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fetch inventory immediately on load
+            fetchInventory();
+
+            // Set up interval for "real-time" refresh (polling the data source every 10 seconds)
+            const refreshInterval = 10000; // 10 Sekunden
+            setInterval(fetchInventory, refreshInterval);
+            console.log(`Inventar wird alle ${refreshInterval / 1000} Sekunden automatisch aktualisiert.`);
+            
+            // Re-apply fade-in after data load
+            const faders = document.querySelectorAll('.fade-in');
+            const appearOptions = {
+                threshold: 0.2,
+                rootMargin: "0px 0px -50px 0px"
+            };
+            
+            const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                });
+            }, appearOptions);
+            
+            faders.forEach(fader => {
+                if (!fader.classList.contains('visible')) {
+                    appearOnScroll.observe(fader);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
