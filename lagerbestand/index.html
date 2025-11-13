@@ -211,17 +211,6 @@
             transform: translateY(0);
         }
 
-        /* New Warning Style for Mock Data */
-        .mock-warning {
-            background-color: #FFFBEA; /* Light Yellow */
-            border: 1px solid #FBC02D; /* Darker Yellow */
-            color: #A07A4A; /* Accent color */
-            padding: 15px;
-            border-radius: var(--radius);
-            margin-bottom: 20px;
-            font-weight: 600;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -250,11 +239,6 @@
             </p>
         </div>
         
-        <!-- NEW: Mock Data Warning Indicator -->
-        <div id="mock-data-warning" class="mock-warning hidden">
-            ⚠️ **DEMO-MODUS:** Es werden Beispiel-Daten angezeigt. Bitte ersetzen Sie "YOUR_GOOGLE_SHEET_PUBLISHED_CSV_URL_HERE" durch Ihre veröffentlichte Google Sheet URL, um Live-Daten zu sehen.
-        </div>
-
         <!-- Loading Indicator -->
         <div id="loading-indicator" class="text-center py-20 text-gray-500 text-xl fade-in visible">
             Echtzeit-Inventardaten werden abgerufen...
@@ -265,11 +249,11 @@
             <!-- Product variant cards will be injected here by JavaScript -->
         </div>
 
-        <!-- Error Message Placeholder -->
+        <!-- Error Message Placeholder (This is the red box) -->
         <div id="error-message" class="hidden text-center py-10" 
             style="background-color: #FEE2E2; border: 1px solid #FCA5A5; color: #EF4444; border-radius: var(--radius); margin-top: 40px;">
             <p class="font-bold">Fehler beim Laden der Lagerdaten.</p>
-            <p>Bitte stellen Sie sicher, dass die Google Sheet URL korrekt und als CSV veröffentlicht ist.</p>
+            <p>Bitte stellen Sie sicher, dass die Google Sheet URL korrekt und als **CSV** veröffentlicht ist, und versuchen Sie es erneut.</p>
         </div>
     </main>
 
@@ -290,27 +274,20 @@
 
     <script>
         // --- 1. CONFIGURATION ---
-        // WICHTIG: Ersetzen Sie diese MOCK_CSV_URL durch die tatsächliche veröffentlichte URL des Google Sheets.
-        const LIVE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvFzppFKuZonWFx_I3nlNp96qlKZWrHZGwwNUmdYTZwhDFRFIl35fJFOuabX6NE0INCfKNNY2oKKeQ/pub?gid=539303511&single=true&output=csv";
-        const PLACEHOLDER_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvFzppFKuZonWFx_I3nlNp96qlKZWrHZGwwNUmdYTZwhDFRFIl35fJFOuabX6NE0INCfKNNY2oKKeQ/pub?gid=539303511&single=true&output=csv";
 
-        // MOCK CSV DATA (Vier verschiedene Holzarten)
-        const MOCK_CSV_DATA = `SKU,VariantName,Stock,ImagePlaceholder,FlavorText
-HOLDER-OAK,Eichenholz Basis,15,https://placehold.co/400x300/a0a0a0/2b2b2b?text=Eiche+Basis,Die Eiche steht für Stärke und verleiht jedem Halter eine warme, robuste Ausstrahlung.
-HOLDER-MAPLE,Ahornholz Basis,3,https://placehold.co/400x300/c9a24a/2b2b2b?text=Ahorn+Basis,Helles Ahornholz bringt eine moderne, saubere Ästhetik in jeden Raum. Perfekt für minimalistische Looks.
-HOLDER-WALNUT,Nussbaumholz Basis,0,https://placehold.co/400x300/6f6f6f/ffffff?text=Nussbaum+Basis,Das dunkle, reiche Finish des Nussbaums bietet einen luxuriösen Kontrast zu hellem Schmuck.
-HOLDER-BEECH,Buchenholz Basis,22,https://placehold.co/400x300/f7f4ef/2b2b2b?text=Buche+Basis,Buchenholz ist vielseitig und langlebig, eine helle und neutrale Wahl.`;
+        // WICHTIG: Ersetzen Sie NUR den folgenden String durch die tatsächliche veröffentlichte URL (im CSV-Format!) Ihres Google Sheets.
+        // Die URL MUSS auf "...&output=csv" enden.
+        const LIVE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvFzppFKuZonWFx_I3nlNp96qlKZWrHZGwwNUmdYTZwhDFRFIl35fJFOuabX6NE0INCfKNNY2oKKeQ/pub?gid=539303511&single=true&output=csv";
+        
+        // Konstante für den leeren Platzhalter-Wert
+        const EMPTY_URL_PLACEHOLDER = "YOUR_GOOGLE_SHEET_PUBLISHED_CSV_URL_HERE";
 
         const inventoryGrid = document.getElementById('inventory-grid');
         const loadingIndicator = document.getElementById('loading-indicator');
         const errorMessage = document.getElementById('error-message');
-        const mockDataWarning = document.getElementById('mock-data-warning');
 
         /**
          * Parses CSV text into an array of product objects.
-         * Now expects SKU, VariantName, Stock, ImagePlaceholder, and FlavorText.
-         * @param {string} csvText - The CSV data as a string.
-         * @returns {Array<Object>} - Array of product objects.
          */
         function parseCSV(csvText) {
             const lines = csvText.trim().split('\n');
@@ -331,7 +308,6 @@ HOLDER-BEECH,Buchenholz Basis,22,https://placehold.co/400x300/f7f4ef/2b2b2b?text
 
         /**
          * Renders the inventory data dynamically into the grid with the new styling.
-         * @param {Array<Object>} products - Array of product objects.
          */
         function renderInventory(products) {
             inventoryGrid.innerHTML = ''; // Clear previous content
@@ -399,22 +375,19 @@ HOLDER-BEECH,Buchenholz Basis,22,https://placehold.co/400x300/f7f4ef/2b2b2b?text
         async function fetchInventory(retries = 3) {
             loadingIndicator.classList.remove('hidden');
             errorMessage.classList.add('hidden');
-            mockDataWarning.classList.add('hidden');
             
-            const isPlaceholder = LIVE_CSV_URL === PLACEHOLDER_URL;
-            let csvText = '';
-
-            if (isPlaceholder) {
-                // If the URL is still the placeholder, use MOCK data and show warning
-                csvText = MOCK_CSV_DATA;
-                mockDataWarning.classList.remove('hidden');
-                console.warn("MOCK-Daten werden verwendet. Bitte aktualisieren Sie die LIVE_CSV_URL.");
-                
-                const products = parseCSV(csvText);
-                renderInventory(products);
+            // Check immediately if the URL is still the placeholder
+            if (LIVE_CSV_URL === EMPTY_URL_PLACEHOLDER) {
+                console.error("LIVE_CSV_URL muss aktualisiert werden, um Daten anzuzeigen.");
                 loadingIndicator.classList.add('hidden');
+                errorMessage.classList.remove('hidden');
+                document.querySelector('#error-message p:last-child').textContent = 
+                    "Bitte aktualisieren Sie die LIVE_CSV_URL im Code mit dem veröffentlichten CSV-Link Ihres Google Sheets.";
+                inventoryGrid.innerHTML = '';
                 return;
             }
+
+            let csvText = '';
 
             // --- Attempt to fetch live data ---
             for (let i = 0; i < retries; i++) {
@@ -441,6 +414,8 @@ HOLDER-BEECH,Buchenholz Basis,22,https://placehold.co/400x300/f7f4ef/2b2b2b?text
             // If all retries fail on live URL
             loadingIndicator.classList.add('hidden');
             errorMessage.classList.remove('hidden');
+            document.querySelector('#error-message p:last-child').textContent = 
+                "Bitte stellen Sie sicher, dass die Google Sheet URL korrekt und als **CSV** veröffentlicht ist, und versuchen Sie es erneut.";
             inventoryGrid.innerHTML = '';
             console.error("Alle Versuche zum Abrufen der Inventardaten sind fehlgeschlagen.");
             
