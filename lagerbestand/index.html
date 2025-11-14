@@ -30,6 +30,23 @@
             display: none !important;
         }
 
+        /* NEU: Spinner Animation für den "Aktualisieren" Status */
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .spinner {
+          display: inline-block;
+          border: 3px solid rgba(0, 0, 0, 0.1);
+          border-top: 3px solid var(--accent);
+          border-radius: 50%;
+          width: 1em;
+          height: 1em;
+          animation: spin 0.8s linear infinite;
+          margin-right: 5px;
+          vertical-align: middle;
+        }
+
         body {
             margin: 0;
             font-family: "Inter", sans-serif;
@@ -124,7 +141,7 @@
             font-size: 1.1rem;
             color: var(--muted);
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 20px; /* Reduced margin for status bar */
             padding: 0 10px;
         }
         
@@ -244,9 +261,19 @@
             </p>
         </div>
         
-        <!-- Loading Indicator - Standardmäßig versteckt, wird nur bei aktivem Laden angezeigt -->
-        <div id="loading-indicator" class="hidden text-center py-20 text-gray-500 text-xl fade-in">
-            Echtzeit-Inventardaten werden abgerufen...
+        <!-- NEUER STATUS-BEREICH: Zeigt den Zeitstempel der letzten Aktualisierung und den Aktualisieren-Knopf -->
+        <div id="update-status-section" style="text-align: center; margin-bottom: 30px; font-size: 0.9rem; color: var(--muted);">
+            <span id="last-update-time">Lade Daten...</span>
+            <button id="refresh-button" style="
+                background: var(--accent); 
+                color: white; 
+                padding: 5px 12px; 
+                border: none; 
+                border-radius: 6px; 
+                margin-left: 15px; 
+                cursor: pointer;
+                transition: background 0.2s;
+            ">Aktualisieren</button>
         </div>
         
         <!-- Inventory Grid Container -->
@@ -283,14 +310,20 @@
         // SCHRITT 1: ERSETZEN SIE DIESEN PLATZHALTER durch die veröffentlichte URL Ihres Google Sheets.
         // SCHRITT 2: STELLEN SIE SICHER, DASS DIE URL AUF "&output=csv" ENDET.
         // Beispiel einer KORREKTEN URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1v.../pub?gid=0&single=true&output=csv"
-        const LIVE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvFzppFKuZonWFx_I3nlNp96qlKZWrHZGwwNUmdYTZwhDFRFIl35fJFOuabX6NE0INCfKNNY2oKKeQ/pub?gid=539303511&single=true&output=csv";
+        const LIVE_CSV_URL = "PASTE_YOUR_PUBLISHED_CSV_LINK_HERE";
         
         // INTERN: Platzhalter-Konstante, nicht ändern
         const EMPTY_URL_PLACEHOLDER = "PASTE_YOUR_PUBLISHED_CSV_LINK_HERE";
 
         const inventoryGrid = document.getElementById('inventory-grid');
-        const loadingIndicator = document.getElementById('loading-indicator');
         const errorMessage = document.getElementById('error-message');
+        
+        // NEUE ELEMENTE FÜR DEN STATUS
+        const lastUpdateTime = document.getElementById('last-update-time');
+        const refreshButton = document.getElementById('refresh-button');
+        
+        // Wir setzen die Ladeanzeige-Variable auf null, da das Element aus dem HTML entfernt wurde
+        const loadingIndicator = null; 
 
         /**
          * Parses CSV text into an array of product objects.
@@ -301,13 +334,9 @@
 
             const headers = lines[0].split(',').map(h => h.trim());
             const data = lines.slice(1).map(line => {
-                // Verwenden Sie eine robustere Methode zum Teilen, die Kommas in Anführungszeichen (Strings) ignoriert.
-                // Da der Google Sheets CSV-Export oft gut formatiert ist, verwenden wir hier weiterhin split,
-                // aber Sie müssen sicherstellen, dass in Ihren Daten keine Kommas in VariantName/FlavorText vorkommen!
                 const values = line.split(',');
                 const item = {};
                 headers.forEach((header, i) => {
-                    // Check if value exists before trimming (to handle empty cells at the end)
                     item[header] = values[i] ? values[i].trim() : ''; 
                 });
                 return item;
@@ -326,7 +355,7 @@
                 return;
             }
             
-            // WICHTIG: NACH ERFOLGREICHEM RENDERN MUSS DIE FEHLERMELDUNG VERSTECKT SEIN
+            // Verstecke die Fehlermeldung
             errorMessage.classList.add('hidden'); 
 
             products.forEach(product => {
@@ -352,7 +381,7 @@
                 const productCard = document.createElement('div');
                 productCard.className = 'wood-product-card fade-in visible';
                 
-                // Card content using the new CSS style
+                // Card content
                 productCard.innerHTML = `
                     <div class="card-image-container">
                         <img 
@@ -385,22 +414,22 @@
          * Main function to fetch and display the inventory (with exponential backoff for robustness).
          */
         async function fetchInventory(retries = 3) {
-            // Zeige Ladeanzeige zu Beginn des Versuchs
-            loadingIndicator.classList.remove('hidden'); 
-            loadingIndicator.classList.add('visible');
+            // ZEIGE LADESTATUS IN DER STATUSLEISTE
+            lastUpdateTime.innerHTML = '<span class="spinner"></span> Aktualisiere...';
+            refreshButton.disabled = true; // Deaktiviere Button während des Abrufs
             
             // Verstecke Fehleranzeige zu Beginn des Versuchs
             errorMessage.classList.add('hidden');
             
-            // Check immediately if the URL is still the placeholder
+            // URL-CHECK
             if (LIVE_CSV_URL === EMPTY_URL_PLACEHOLDER) {
                 console.error("LIVE_CSV_URL muss aktualisiert werden, um Daten anzuzeigen.");
-                loadingIndicator.classList.add('hidden');
-                loadingIndicator.classList.remove('visible');
-                errorMessage.classList.remove('hidden'); // SHOWS ERROR
+                lastUpdateTime.textContent = 'FEHLER: URL fehlt!';
+                errorMessage.classList.remove('hidden'); 
                 document.querySelector('#error-message p:last-child').textContent = 
                     "Bitte aktualisieren Sie die LIVE_CSV_URL im Code mit dem veröffentlichten CSV-Link Ihres Google Sheets.";
                 inventoryGrid.innerHTML = '';
+                refreshButton.disabled = false;
                 return;
             }
 
@@ -420,11 +449,13 @@
                     const products = parseCSV(csvText);
                     renderInventory(products);
                     
-                    // Erfolg: Verstecke Ladeanzeige und Fehleranzeige
-                    loadingIndicator.classList.add('hidden'); 
-                    loadingIndicator.classList.remove('visible');
+                    // ERFOLG: Aktualisiere Zeitstempel und reaktiviere Button
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    lastUpdateTime.textContent = `Zuletzt aktualisiert: ${timeString}`;
+                    refreshButton.disabled = false; 
                     errorMessage.classList.add('hidden'); 
-                    console.log("Inventar erfolgreich geladen und gerendert.");
+                    console.log(`Inventar erfolgreich geladen und gerendert um ${timeString}.`);
                     
                     return; // Success, exit function
                 } catch (error) {
@@ -437,8 +468,8 @@
             }
             
             // If all retries fail on live URL
-            loadingIndicator.classList.add('hidden'); // Hide loading
-            loadingIndicator.classList.remove('visible');
+            lastUpdateTime.textContent = 'Laden fehlgeschlagen.'; // Setzt den Status auf Fehler
+            refreshButton.disabled = false; // Re-enable the button
             errorMessage.classList.remove('hidden'); // SHOWS ERROR
             document.querySelector('#error-message p:last-child').textContent = 
                 "Bitte stellen Sie sicher, dass die Google Sheet URL korrekt und als **CSV** veröffentlicht ist, und versuchen Sie es erneut. (Prüfen Sie insbesondere, ob die URL auf **&output=csv** endet.)";
@@ -450,6 +481,11 @@
         // --- 2. INITIALIZATION & REAL-TIME REFRESH ---
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Event Listener für den manuellen Refresh Button
+            refreshButton.addEventListener('click', () => {
+                fetchInventory(1); // Führt einen sofortigen Abruf durch
+            });
+            
             // Fetch inventory immediately on load
             fetchInventory();
 
