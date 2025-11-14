@@ -261,19 +261,10 @@
             </p>
         </div>
         
-        <!-- NEUER STATUS-BEREICH: Zeigt den Zeitstempel der letzten Aktualisierung und den Aktualisieren-Knopf -->
+        <!-- STATUS-BEREICH: Zeigt den Zeitstempel der letzten Aktualisierung (OHNE Knopf) -->
         <div id="update-status-section" style="text-align: center; margin-bottom: 30px; font-size: 0.9rem; color: var(--muted);">
             <span id="last-update-time">Lade Daten...</span>
-            <button id="refresh-button" style="
-                background: var(--accent); 
-                color: white; 
-                padding: 5px 12px; 
-                border: none; 
-                border-radius: 6px; 
-                margin-left: 15px; 
-                cursor: pointer;
-                transition: background 0.2s;
-            ">Aktualisieren</button>
+            <!-- Der Aktualisieren-Knopf wurde hier entfernt -->
         </div>
         
         <!-- Inventory Grid Container -->
@@ -320,7 +311,7 @@
         
         // NEUE ELEMENTE FÜR DEN STATUS
         const lastUpdateTime = document.getElementById('last-update-time');
-        const refreshButton = document.getElementById('refresh-button');
+        // const refreshButton = document.getElementById('refresh-button'); // ENTFERNT
         
         // Wir setzen die Ladeanzeige-Variable auf null, da das Element aus dem HTML entfernt wurde
         const loadingIndicator = null; 
@@ -416,7 +407,7 @@
         async function fetchInventory(retries = 3) {
             // ZEIGE LADESTATUS IN DER STATUSLEISTE
             lastUpdateTime.innerHTML = '<span class="spinner"></span> Aktualisiere...';
-            refreshButton.disabled = true; // Deaktiviere Button während des Abrufs
+            // refreshButton.disabled = true; // ENTFERNT, da der Knopf entfernt wurde
             
             // Verstecke Fehleranzeige zu Beginn des Versuchs
             errorMessage.classList.add('hidden');
@@ -429,16 +420,20 @@
                 document.querySelector('#error-message p:last-child').textContent = 
                     "Bitte aktualisieren Sie die LIVE_CSV_URL im Code mit dem veröffentlichten CSV-Link Ihres Google Sheets.";
                 inventoryGrid.innerHTML = '';
-                refreshButton.disabled = false;
+                // refreshButton.disabled = false; // ENTFERNT
                 return;
             }
 
             let csvText = '';
+            
+            // Hinzufügen eines Cache-Busters zur URL, um sicherzustellen, dass immer die neueste Version von Google Sheets abgerufen wird.
+            const fetchUrl = LIVE_CSV_URL + `&t=${Date.now()}`;
 
             // --- Attempt to fetch live data ---
             for (let i = 0; i < retries; i++) {
                 try {
-                    const response = await fetch(LIVE_CSV_URL, { cache: "no-store" });
+                    // Verwende fetchUrl, die den Cache-Buster enthält
+                    const response = await fetch(fetchUrl, { cache: "no-store" }); 
                     
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -449,11 +444,11 @@
                     const products = parseCSV(csvText);
                     renderInventory(products);
                     
-                    // ERFOLG: Aktualisiere Zeitstempel und reaktiviere Button
+                    // ERFOLG: Aktualisiere Zeitstempel
                     const now = new Date();
                     const timeString = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                     lastUpdateTime.textContent = `Zuletzt aktualisiert: ${timeString}`;
-                    refreshButton.disabled = false; 
+                    // refreshButton.disabled = false; // ENTFERNT
                     errorMessage.classList.add('hidden'); 
                     console.log(`Inventar erfolgreich geladen und gerendert um ${timeString}.`);
                     
@@ -469,7 +464,7 @@
             
             // If all retries fail on live URL
             lastUpdateTime.textContent = 'Laden fehlgeschlagen.'; // Setzt den Status auf Fehler
-            refreshButton.disabled = false; // Re-enable the button
+            // refreshButton.disabled = false; // ENTFERNT
             errorMessage.classList.remove('hidden'); // SHOWS ERROR
             document.querySelector('#error-message p:last-child').textContent = 
                 "Bitte stellen Sie sicher, dass die Google Sheet URL korrekt und als **CSV** veröffentlicht ist, und versuchen Sie es erneut. (Prüfen Sie insbesondere, ob die URL auf **&output=csv** endet.)";
@@ -481,10 +476,7 @@
         // --- 2. INITIALIZATION & REAL-TIME REFRESH ---
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Event Listener für den manuellen Refresh Button
-            refreshButton.addEventListener('click', () => {
-                fetchInventory(1); // Führt einen sofortigen Abruf durch
-            });
+            // Event Listener für den manuellen Refresh Button wurde entfernt.
             
             // Fetch inventory immediately on load
             fetchInventory();
