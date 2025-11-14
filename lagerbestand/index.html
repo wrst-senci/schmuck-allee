@@ -232,6 +232,17 @@
             opacity: 1;
             transform: translateY(0);
         }
+        
+        /* Style for the last-update-time span to indicate it's clickable (via double-click) */
+        #last-update-time {
+            cursor: pointer;
+            text-decoration: underline dotted;
+            text-underline-offset: 3px;
+            transition: color 0.2s;
+        }
+        #last-update-time:hover {
+            color: var(--text);
+        }
 
     </style>
 </head>
@@ -263,8 +274,8 @@
         
         <!-- STATUS-BEREICH: Zeigt den Zeitstempel der letzten Aktualisierung (OHNE Knopf) -->
         <div id="update-status-section" style="text-align: center; margin-bottom: 30px; font-size: 0.9rem; color: var(--muted);">
+            <!-- HINWEIS: Doppelklicken Sie hier, um manuell zu aktualisieren! -->
             <span id="last-update-time">Lade Daten...</span>
-            <!-- Der Aktualisieren-Knopf wurde hier entfernt -->
         </div>
         
         <!-- Inventory Grid Container -->
@@ -276,7 +287,7 @@
         <div id="error-message" class="hidden text-center py-10" 
             style="background-color: #FEE2E2; border: 1px solid #FCA5A5; color: #EF4444; border-radius: var(--radius); margin-top: 40px;">
             <p class="font-bold">Fehler beim Laden der Lagerdaten.</p>
-            <p>Bitte stellen Sie sicher, dass die Google Sheet URL korrekt und als **CSV** veröffentlicht ist, und versuchen Sie es erneut. (Prüfen Sie insbesondere, ob die URL auf **&output=csv** endet.)</p>
+            <p>Bitte stellen Sie sicher, dass die Google Sheet URL korrekt und als **CSV** veröffentlicht ist (sie muss auf **&output=csv** enden).</p>
         </div>
     </main>
 
@@ -301,20 +312,19 @@
         // SCHRITT 1: ERSETZEN SIE DIESEN PLATZHALTER durch die veröffentlichte URL Ihres Google Sheets.
         // SCHRITT 2: STELLEN SIE SICHER, DASS DIE URL AUF "&output=csv" ENDET.
         // Beispiel einer KORREKTEN URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1v.../pub?gid=0&single=true&output=csv"
-        const LIVE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvFzppFKuZonWFx_I3nlNp96qlKZWrHZGwwNUmdYTZwhDFRFIl35fJFOuabX6NE0INCfKNNY2oKKeQ/pub?gid=539303511&single=true&output=csv";
+        const LIVE_CSV_URL = "PASTE_YOUR_PUBLISHED_CSV_LINK_HERE";
         
         // INTERN: Platzhalter-Konstante, nicht ändern
-        const EMPTY_URL_PLACEHOLDER = "PASTE_YOUR_PUBLISHED_CSV_LINK_HERE";
+        const EMPTY_URL_PLACEHOLDER = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvFzppFKuZonWFx_I3nlNp96qlKZWrHZGwwNUmdYTZwhDFRFIl35fJFOuabX6NE0INCfKNNY2oKKeQ/pub?gid=539303511&single=true&output=csv";
 
         const inventoryGrid = document.getElementById('inventory-grid');
         const errorMessage = document.getElementById('error-message');
         
         // NEUE ELEMENTE FÜR DEN STATUS
         const lastUpdateTime = document.getElementById('last-update-time');
-        // const refreshButton = document.getElementById('refresh-button'); // ENTFERNT
         
-        // Wir setzen die Ladeanzeige-Variable auf null, da das Element aus dem HTML entfernt wurde
-        const loadingIndicator = null; 
+        // Globale Variable, um zu verhindern, dass Mehrfach-Abrufe gleichzeitig laufen
+        let isFetching = false; 
 
         /**
          * Parses CSV text into an array of product objects.
@@ -403,11 +413,19 @@
 
         /**
          * Main function to fetch and display the inventory (with exponential backoff for robustness).
+         * Retries auf 5 erhöht.
          */
-        async function fetchInventory(retries = 3) {
+        async function fetchInventory(retries = 5) {
+            // Verhindern, dass mehrere Abrufe gleichzeitig laufen
+            if (isFetching) {
+                console.log("Aktueller Abruf läuft bereits, überspringe.");
+                return;
+            }
+            isFetching = true;
+
             // ZEIGE LADESTATUS IN DER STATUSLEISTE
             lastUpdateTime.innerHTML = '<span class="spinner"></span> Aktualisiere...';
-            // refreshButton.disabled = true; // ENTFERNT, da der Knopf entfernt wurde
+            lastUpdateTime.style.cursor = 'wait';
             
             // Verstecke Fehleranzeige zu Beginn des Versuchs
             errorMessage.classList.add('hidden');
@@ -420,7 +438,8 @@
                 document.querySelector('#error-message p:last-child').textContent = 
                     "Bitte aktualisieren Sie die LIVE_CSV_URL im Code mit dem veröffentlichten CSV-Link Ihres Google Sheets.";
                 inventoryGrid.innerHTML = '';
-                // refreshButton.disabled = false; // ENTFERNT
+                isFetching = false;
+                lastUpdateTime.style.cursor = 'pointer';
                 return;
             }
 
@@ -432,7 +451,8 @@
             // --- Attempt to fetch live data ---
             for (let i = 0; i < retries; i++) {
                 try {
-                    // Verwende fetchUrl, die den Cache-Buster enthält
+                    // Verwende fetchUrl, die den Cache-Buster enthält. 
+                    // cache: "no-store" ist der aggressivste Weg, um den Browser-Cache zu umgehen.
                     const response = await fetch(fetchUrl, { cache: "no-store" }); 
                     
                     if (!response.ok) {
@@ -448,15 +468,17 @@
                     const now = new Date();
                     const timeString = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                     lastUpdateTime.textContent = `Zuletzt aktualisiert: ${timeString}`;
-                    // refreshButton.disabled = false; // ENTFERNT
                     errorMessage.classList.add('hidden'); 
                     console.log(`Inventar erfolgreich geladen und gerendert um ${timeString}.`);
                     
+                    isFetching = false;
+                    lastUpdateTime.style.cursor = 'pointer';
                     return; // Success, exit function
                 } catch (error) {
                     console.error(`Fehler beim Abrufen (Versuch ${i + 1}/${retries}):`, error);
                     if (i < retries - 1) {
-                        const delay = Math.pow(2, i) * 1000; // Exponential backoff (1s, 2s, 4s)
+                        // Exponential backoff (1s, 2s, 4s, 8s, 16s)
+                        const delay = Math.pow(2, i) * 1000; 
                         await new Promise(resolve => setTimeout(resolve, delay));
                     }
                 }
@@ -464,25 +486,30 @@
             
             // If all retries fail on live URL
             lastUpdateTime.textContent = 'Laden fehlgeschlagen.'; // Setzt den Status auf Fehler
-            // refreshButton.disabled = false; // ENTFERNT
             errorMessage.classList.remove('hidden'); // SHOWS ERROR
             document.querySelector('#error-message p:last-child').textContent = 
-                "Bitte stellen Sie sicher, dass die Google Sheet URL korrekt und als **CSV** veröffentlicht ist, und versuchen Sie es erneut. (Prüfen Sie insbesondere, ob die URL auf **&output=csv** endet.)";
+                "Bitte stellen Sie sicher, dass die Google Sheet URL korrekt und als **CSV** veröffentlicht ist (sie muss auf **&output=csv** enden).";
             inventoryGrid.innerHTML = '';
             console.error("Alle Versuche zum Abrufen der Inventardaten sind fehlgeschlagen.");
             
+            isFetching = false;
+            lastUpdateTime.style.cursor = 'pointer';
         }
 
         // --- 2. INITIALIZATION & REAL-TIME REFRESH ---
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Event Listener für den manuellen Refresh Button wurde entfernt.
+            // Event Listener für die versteckte manuelle Aktualisierung (Doppelklick)
+            lastUpdateTime.addEventListener('dblclick', () => {
+                console.log('Manuelle Aktualisierung per Doppelklick ausgelöst.');
+                fetchInventory(1); // Erzwinge einen Abruf ohne Backoff
+            });
             
             // Fetch inventory immediately on load
             fetchInventory();
 
-            // Set up interval for "real-time" refresh (polling the data source every 10 seconds)
-            const refreshInterval = 10000; // 10 Sekunden
+            // Set up interval for "real-time" refresh (polling the data source every 15 seconds)
+            const refreshInterval = 15000; // 15 Sekunden
             setInterval(fetchInventory, refreshInterval);
             console.log(`Inventar wird alle ${refreshInterval / 1000} Sekunden automatisch aktualisiert.`);
             
