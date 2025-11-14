@@ -25,6 +25,11 @@
 
         * { box-sizing: border-box; }
         
+        /* FIX FÜR VERSTECKTE ELEMENTE: Da wir kein Tailwind nutzen, müssen wir .hidden selbst definieren. */
+        .hidden {
+            display: none !important;
+        }
+
         body {
             margin: 0;
             font-family: "Inter", sans-serif;
@@ -239,8 +244,8 @@
             </p>
         </div>
         
-        <!-- Loading Indicator -->
-        <div id="loading-indicator" class="text-center py-20 text-gray-500 text-xl fade-in visible">
+        <!-- Loading Indicator - Standardmäßig versteckt, wird nur bei aktivem Laden angezeigt -->
+        <div id="loading-indicator" class="hidden text-center py-20 text-gray-500 text-xl fade-in">
             Echtzeit-Inventardaten werden abgerufen...
         </div>
         
@@ -380,14 +385,18 @@
          * Main function to fetch and display the inventory (with exponential backoff for robustness).
          */
         async function fetchInventory(retries = 3) {
-            loadingIndicator.classList.remove('hidden');
-            // Wichtig: Verstecke die Fehlermeldung bei jedem Startversuch
+            // Zeige Ladeanzeige zu Beginn des Versuchs
+            loadingIndicator.classList.remove('hidden'); 
+            loadingIndicator.classList.add('visible');
+            
+            // Verstecke Fehleranzeige zu Beginn des Versuchs
             errorMessage.classList.add('hidden');
             
             // Check immediately if the URL is still the placeholder
             if (LIVE_CSV_URL === EMPTY_URL_PLACEHOLDER) {
                 console.error("LIVE_CSV_URL muss aktualisiert werden, um Daten anzuzeigen.");
                 loadingIndicator.classList.add('hidden');
+                loadingIndicator.classList.remove('visible');
                 errorMessage.classList.remove('hidden'); // SHOWS ERROR
                 document.querySelector('#error-message p:last-child').textContent = 
                     "Bitte aktualisieren Sie die LIVE_CSV_URL im Code mit dem veröffentlichten CSV-Link Ihres Google Sheets.";
@@ -408,20 +417,17 @@
                     
                     csvText = await response.text();
                     
-                    // NEU: HINWEIS: Wir entfernen die strenge Content-Type-Prüfung, da der Code funktioniert.
-                    // Wenn das Parsen unten erfolgreich ist, ist der Content-Type gut genug.
-                    
                     const products = parseCSV(csvText);
                     renderInventory(products);
-                    loadingIndicator.classList.add('hidden');
                     
-                    // Erfolg: Stelle sicher, dass der Fehler definitiv versteckt ist.
+                    // Erfolg: Verstecke Ladeanzeige und Fehleranzeige
+                    loadingIndicator.classList.add('hidden'); 
+                    loadingIndicator.classList.remove('visible');
                     errorMessage.classList.add('hidden'); 
                     console.log("Inventar erfolgreich geladen und gerendert.");
                     
                     return; // Success, exit function
                 } catch (error) {
-                    // Wenn ein Fehler auftritt (z.B. Fetch-Fehler, 404, oder Parsen schlägt fehl)
                     console.error(`Fehler beim Abrufen (Versuch ${i + 1}/${retries}):`, error);
                     if (i < retries - 1) {
                         const delay = Math.pow(2, i) * 1000; // Exponential backoff (1s, 2s, 4s)
@@ -431,7 +437,8 @@
             }
             
             // If all retries fail on live URL
-            loadingIndicator.classList.add('hidden');
+            loadingIndicator.classList.add('hidden'); // Hide loading
+            loadingIndicator.classList.remove('visible');
             errorMessage.classList.remove('hidden'); // SHOWS ERROR
             document.querySelector('#error-message p:last-child').textContent = 
                 "Bitte stellen Sie sicher, dass die Google Sheet URL korrekt und als **CSV** veröffentlicht ist, und versuchen Sie es erneut. (Prüfen Sie insbesondere, ob die URL auf **&output=csv** endet.)";
