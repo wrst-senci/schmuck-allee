@@ -312,7 +312,7 @@
         // SCHRITT 1: ERSETZEN SIE DIESEN PLATZHALTER durch die veröffentlichte URL Ihres Google Sheets.
         // SCHRITT 2: STELLEN SIE SICHER, DASS DIE URL AUF "&output=csv" ENDET.
         // Beispiel einer KORREKTEN URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1v.../pub?gid=0&single=true&output=csv"
-        const LIVE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvFzppFKuZonWFx_I3nlNp96qlKZWrHZGwwNUmdYTZwhDFRFIl35fJFOuabX6NE0INCfKNNY2oKKeQ/pub?gid=539303511&single=true&output=csv";
+        const LIVE_CSV_URL = "PASTE_YOUR_PUBLISHED_CSV_LINK_HERE";
         
         // INTERN: Platzhalter-Konstante, nicht ändern
         const EMPTY_URL_PLACEHOLDER = "PASTE_YOUR_PUBLISHED_CSV_LINK_HERE";
@@ -466,7 +466,8 @@
                     
                     // ERFOLG: Aktualisiere Zeitstempel
                     const now = new Date();
-                    const timeString = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    // NEU: Nur Stunden und Minuten anzeigen
+                    const timeString = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }); 
                     lastUpdateTime.textContent = `Zuletzt aktualisiert: ${timeString}`;
                     errorMessage.classList.add('hidden'); 
                     console.log(`Inventar erfolgreich geladen und gerendert um ${timeString}.`);
@@ -508,8 +509,8 @@
             // Fetch inventory immediately on load
             fetchInventory();
 
-            // Set up interval for "real-time" refresh (polling the data source every 15 seconds)
-            const refreshInterval = 15000; // 15 Sekunden
+            // NEU: Set up interval for "real-time" refresh (polling the data source every 60 seconds)
+            const refreshInterval = 60000; // 1 Minute
             setInterval(fetchInventory, refreshInterval);
             console.log(`Inventar wird alle ${refreshInterval / 1000} Sekunden automatisch aktualisiert.`);
             
