@@ -201,8 +201,7 @@
     </div>
   </section>
 
-  <script>
-    // JavaScript für das Kontaktformular
+<script>
     const form = document.getElementById('contact-form');
     const statusEl = document.getElementById('form-status');
 
@@ -217,23 +216,35 @@
         message: formData.get('message')?.trim(),
       };
 
+      // Validation
       if (!payload.name || !payload.email || !payload.message) {
         return setStatus('Bitte alle Pflichtfelder ausfüllen.', 'error');
       }
 
       try {
-        setStatus('Sende Nachricht…', 'info');
+        setStatus('Sende Nachricht...', 'info');
 
-        // Simulierte API-Anfrage, da der Backend-Endpunkt hier nicht verfügbar ist
-        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
-        
-        // Bei Erfolg simulieren
-        setStatus('Danke! Ihre Nachricht wurde erfolgreich gesendet.', 'success');
-        form.reset();
+        // REAL API CALL
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.ok) {
+          setStatus('Danke! Ihre Nachricht wurde erfolgreich gesendet.', 'success');
+          form.reset();
+        } else {
+          throw new Error(result.error || 'Server Fehler');
+        }
         
       } catch (err) {
         console.error('Contact form error:', err);
-        setStatus(`Fehler: Die Nachricht konnte nicht gesendet werden (Simuliert).`, 'error');
+        setStatus(`Fehler: ${err.message}`, 'error');
       }
     });
 
